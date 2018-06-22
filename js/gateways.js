@@ -13,10 +13,26 @@ var gateways = {
 				},
 				'BCN': {
 					code: 'BCN',
-					image: 'assets/bitbox.one/BCN.png',
+					image: 'assets/bitbox.one/bcn.png',
+					issuer: 'GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S',
+					list: true
+				},
+				'BCNY': {
+					code: 'BCNY',
+					image: 'assets/bitbox.one/bcny.png',
 					issuer: 'GBCNYBHAAPDSU3UIHXXQTHYZVSBJBI4YUNWXMKJBCPDHTVYR75G6NFHD',
 					list: true
 				},
+				'XRP': {
+					code: "XRP",
+					image: "assets/bitbox.one/xrp.png",
+					issuer: "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S"
+				},
+				'SDA': {
+					code: "SDA",
+					image: "assets/bitbox.one/sda.jpg",
+					issuer: "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S"
+				}
 			},
 			logo: 'assets/bitbox.one/usdt.png',
 		},

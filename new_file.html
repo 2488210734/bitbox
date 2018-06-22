@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
-		<meta charset="UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/icons-extra.css" />
+		<link href="css/hx.css" rel="stylesheet" />
+		<link href="css/offer.css" rel="stylesheet" />
+		<style>
+			.a {
+				display: flex;
+				padding: 50px 30px;
+			}
+		</style>
+
 	</head>
+
 	<body>
-		
-		
-		
-		<script src="libs/bower_components/stellar-sdk/stellar-sdk.js"></script>
-		<script src="libs/toml.min.js"></script>
-		<script src="js/gateways.js"></script>
+
+		<div class="a">
+			<button class="jian">-</button>
+			<input type="number" class="num" />
+			<button class="jia">+</button>
+		</div>
+
 		<script src="js/jquery.js"></script>
-		<script src="js/template-web.js"></script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/function.js"></script>
-		<script src="js/mui.enterfocus.js"></script>
-		<script src="js/toml-js.js"></script>
-		<script src="js/sjcl.js"></script>
-		<script src="js/hx.js"></script>
-		
-		<script type="text/javascript">
-			$(function(){
-				$.toml.getbydomain("bitbox.one");
-			});
+
+		<script>
+			$(function() {
+
+				$("body").on('click', '.jian', function() {
+
+					var num = $(".num").val();
+					num = (parseFloat(num)*10000 - 1*10000)/10000;
+					$(".num").val(num);
+				});
+
+				$(".jia").click(function() {
+					var num = $(".num").val();
+					num = parseFloat(num) + 1;
+					$(".num").val(num);
+				});
+			})
 		</script>
-		
-		
 	</body>
+
 </html>

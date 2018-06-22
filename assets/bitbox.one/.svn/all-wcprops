@@ -21,3 +21,21 @@ svn:wc:ra_dav:version-url
 V 55
 /svn/bitbox/!svn/ver/3/bitbox/assets/bitbox.one/BCN.png
 END
+sda.jpg
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/bitbox/!svn/ver/17/bitbox/assets/bitbox.one/sda.jpg
+END
+xrp.png
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/bitbox/!svn/ver/17/bitbox/assets/bitbox.one/xrp.png
+END
+bcny.png
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/bitbox/!svn/ver/17/bitbox/assets/bitbox.one/bcny.png
+END

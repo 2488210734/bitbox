@@ -171,7 +171,13 @@
 				//$.checkuser();
 				var ss = $.getsourcePublicKey();
 				$('#publickey').val(ss);
-				$('#version').html(apkVer);
+
+	plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+		$('#version').html(inf.version);
+	});
+
+
+				
 
 				checkUpdate();
 

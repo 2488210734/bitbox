@@ -180,8 +180,8 @@
 								});
 							})
 							.catch(function(e) {
-								console.log(JSON.stringify(sendasset));
-								console.log(JSON.stringify(new StellarSdk.Asset.native()));
+								console.log(JSON.stringify(e));
+								console.error(e);
 
 								if(sendasset.code == "XLM") {
 									console.log("尝试激活账号...")

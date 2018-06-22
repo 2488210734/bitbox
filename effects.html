@@ -73,7 +73,7 @@
 											<span class="buy">
 												<span>
 {{formatenum(item.sold_amount,3)}} {{translateassetname(item.sold_asset_code,item.sold_asset_type)}} 
-													<span class="mui-icon mui-icon-arrowthinright"></span> {{formatenum(item.bought_amount,3)}} {{translateassetname(item.bought_asset_code,item.bought_asset_type)}} <span class="red">({{formatenum(1/item.operation.price,5)}})</span>
+													<span class="mui-icon mui-icon-arrowthinright"></span> {{formatenum(item.bought_amount,3)}} {{translateassetname(item.bought_asset_code,item.bought_asset_type)}} <span class="red">({{formatenum(item.bought_amount/item.sold_amount,5)}})</span>
 											</span>
 											</span>
 										</div>
@@ -87,7 +87,7 @@
 											<span class="buy">
 												<span>
 {{formatenum(item.sold_amount,3)}} {{translateassetname(item.sold_asset_code,item.sold_asset_type)}} 
-													<span class="mui-icon mui-icon-arrowthinright"></span> {{formatenum(item.bought_amount,3)}} {{translateassetname(item.bought_asset_code,item.bought_asset_type)}} <span class="red">({{formatenum(item.sold_amount/item.bought_amount,5)}})</span>
+													<span class="mui-icon mui-icon-arrowthinright"></span> {{formatenum(item.bought_amount,3)}} {{translateassetname(item.bought_asset_code,item.bought_asset_type)}} <span class="red">({{formatenum(item.bought_amount/item.sold_amount,5)}})</span>
 											</span>
 											</span>
 										</div>
@@ -213,7 +213,7 @@
 							var dtd = $.Deferred();
 
 							$.get($.apiaddress + "/accounts/" + $.getsourcePublicKey() + "/effects?limit=10&order=desc").then(function(effectResults) {
-								//console.log(JSON.stringify(effectResults));
+								console.log(JSON.stringify(effectResults));
 								ts.alldata = [];
 //								var usefullindex = 0;
 								$.each(effectResults._embedded.records, function(index, value) {

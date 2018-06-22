@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="ui-page-accountlist">
+<html>
 
 	<head>
 		<meta charset="utf-8">
@@ -9,20 +9,29 @@
 		<link rel="stylesheet" href="css/icons-extra.css" />
 		<link href="css/hx.css" rel="stylesheet" />
 		<style>
-			body,.mui-content{
+			body,
+			.mui-content {
 				background: #fff;
 			}
-			.bitboxp{
-				padding: 30px 15px 15px; line-height: 160%;
+			
+			.bitboxp {
+				padding: 30px 15px 15px;
+				line-height: 160%;
 			}
-			.bitboxp p{
-				padding:0; margin:0; color:#666
+			
+			.bitboxp p {
+				padding: 0;
+				margin: 0;
+				color: #666
 			}
-			.ewm{
-				padding: 15px;
+			
+			.ewm {
+				padding: 15px 30px;
 			}
-			.ewm img{
-				width:100%; height:auto
+			
+			.ewm img {
+				width: 100%;
+				height: auto
 			}
 		</style>
 	</head>
@@ -44,7 +53,7 @@
 					<p>微信：加此微信后入群</p>
 				</div>
 				<div class="ewm">
-					<img src="images/bitboxqr.jpg" alt="bitbox微信二维码" />
+					<img src="images/bitboxqr.jpg" alt="bitbox微信二维码" id="bitboxqr" />
 				</div>
 
 			</div>
@@ -64,7 +73,41 @@
 			mui.plusReady(function() {
 				$.checkuser();
 
-			});
+				mui.init({
+					gestureConfig: {
+						tap: true, //默认为true
+						doubletap: true, //默认为false
+						longtap: true, //默认为false
+						swipe: true, //默认为true
+						drag: true, //默认为true
+						hold: true, //默认为false，不监听
+						release: false //默认为false，不监听
+					}
+				})
+
+				//var bc = new plus.barcode.Barcode("bitboxqr");
+				//console.log(JSON.stringify(bc));
+				if(mui.os.android){
+					
+				
+				mui('.ewm').on('longtap', '#bitboxqr', function(e) {
+					plus.nativeUI.actionSheet({
+						title: "是否保存此图片？",
+						cancel: "取消",
+						buttons: [{
+							title: "确定"
+						}]
+					}, function(e) {
+						if(e.index == 1) {
+							plus.gallery.save("images/bitboxqr.jpg", function() {
+								plus.nativeUI.alert("保存图片到相册成功");
+							})
+						}
+					});
+				})
+				}
+
+			})
 		</script>
 	</body>
 

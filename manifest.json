@@ -7,7 +7,7 @@
 	"id": "H555FF891",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "换币宝",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.1.7",/*应用版本名称*/
+		"name": "1.1.12",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "换币宝",/*应用描述信息*/
@@ -124,7 +124,7 @@
 			"icons": {
 				"ios": {
 					"prerendered": true, /*应用图标是否已经高亮处理，在iOS6及以下设备上有效*/
-					"auto": "", /*应用图标，分辨率：512x512，用于自动生成各种尺寸程序图标*/
+					 /*应用图标，分辨率：512x512，用于自动生成各种尺寸程序图标*/
 					"iphone": {
 						"normal": "unpackage/res/icons/57x57.png",/*iPhone普通屏幕程序图标，分辨率：57x57*/
 						"retina": "unpackage/res/icons/114x114.png",/*iPhone高分屏程序图标，分辨率：114x114*/
@@ -135,14 +135,14 @@
 						"settings-normal": "unpackage/res/icons/29x29.png", /*iPhone设置页面程序图标，分辨率：29x29*/
 
 
-						"app@2x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/120.png",
-						"app@3x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/180.png",
-						"settings@2x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/58.png",
-						"settings@3x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/87.png",
-						"spotlight@3x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/120.png",
-						"spotlight@2x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/80.png",
-						"notification@3x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/60.png",
-						"notification@2x": "D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/40.png"
+						"app@2x": "unpackage/res/icons/120x120.png",
+						"app@3x": "unpackage/res/icons/180x180.png",
+						"settings@2x": "unpackage/res/icons/58x58.png",
+						"settings@3x": "unpackage/res/icons/87x87.png",
+						"spotlight@3x": "unpackage/res/icons/120x120.png",
+						"spotlight@2x": "unpackage/res/icons/80x80.png",
+						"notification@3x": "unpackage/res/icons/60x60.png",
+						"notification@2x": "unpackage/res/icons/40x40.png"
 					},
 					"ipad": {
 						"normal": "unpackage/res/icons/72x72.png", /*iPad普通屏幕程序图标，分辨率：72x72*/
@@ -154,24 +154,24 @@
 						/*iPad iOS7 Spotlight搜索程序图标，分辨率：40x40*/
 						/*iPad iOS7高分屏Spotlight搜索程序图标，分辨率：80x80*/
 						/*iPad设置页面程序图标，分辨率：29x29*/
-						"app":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/76.png","app@2x":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/152.png","settings":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/29.png","spotlight":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/40.png","settings@2x":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/58.png","spotlight@2x":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/80.png","notification":"D:/pro/参考/图标/微信图片_20180511110835/Images.xcassets/AppIcon.appiconset/29.png"
-					}
+						"app":"unpackage/res/icons/76x76.png","app@2x":"unpackage/res/icons/152x152.png","settings":"unpackage/res/icons/29x29.png","spotlight":"unpackage/res/icons/40x40.png","settings@2x":"unpackage/res/icons/58x58.png","spotlight@2x":"unpackage/res/icons/80x80.png","notification":"unpackage/res/icons/20x20.png","proapp@2x":"unpackage/res/icons/167x167.png","notification@2x":"unpackage/res/icons/40x40.png"
+					},"appstore":"unpackage/res/icons/1024x1024.png"
 				},
 				"android": {
-					"mdpi": "D:/pro/参考/图标/android/48/ic_launcher.png", /*普通屏程序图标，分辨率：48x48*/
-					"ldpi": "D:/pro/参考/图标/android/48/ic_launcher.png", /*大屏程序图标，分辨率：48x48*/
-					"hdpi": "D:/pro/参考/图标/android/72/ic_launcher.png", /*高分屏程序图标，分辨率：72x72*/
-					"xhdpi": "D:/pro/参考/图标/android/96/ic_launcher.png",/*720P高分屏程序图标，分辨率：96x96*/
-					"xxhdpi": "D:/pro/参考/图标/android/144/ic_launcher.png",
-					"xxxhdpi": "D:/pro/参考/图标/android/192/ic_launcher.png"
+					"mdpi": "unpackage/res/icons/48x48.png", /*普通屏程序图标，分辨率：48x48*/
+					"ldpi": "unpackage/res/icons/48x48.png", /*大屏程序图标，分辨率：48x48*/
+					"hdpi": "unpackage/res/icons/72x72.png", /*高分屏程序图标，分辨率：72x72*/
+					"xhdpi": "unpackage/res/icons/96x96.png",/*720P高分屏程序图标，分辨率：96x96*/
+					"xxhdpi": "unpackage/res/icons/144x144.png",
+					"xxxhdpi": "unpackage/res/icons/192x192.png"
 				}
 			},
 			"splashscreen": {
 				"ios": {
 					"iphone": {
 						"default": "", /*iPhone3启动图片选，分辨率：320x480*/
-						"retina35": "",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
-						"retina40": ""
+						"retina35": "D:/pro/参考/图标/启动图/640x960.png",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
+						"retina40": "D:/pro/参考/图标/启动图/640x1136.png","iphonex":"D:/pro/参考/图标/启动图/1125x2436.png","retina47":"D:/pro/参考/图标/启动图/750x1334.png","retina55":"D:/pro/参考/图标/启动图/1242x2208.png"
 					},
 					"ipad": {
 						"portrait": "", /*iPad竖屏启动图片，分辨率：768x1004*/
@@ -187,9 +187,9 @@
 				"android": {
 					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
 					"ldpi": "", /*大屏启动图片，分辨率：320x442*/
-					"hdpi": "D:/pro/参考/图标/启动图/01.png", /*高分屏启动图片，分辨率：480x762*/
-					"xhdpi": "D:/pro/参考/图标/启动图/02.png",
-					"xxhdpi": "D:/pro/参考/图标/启动图/03.png"
+					"hdpi": "D:/pro/参考/图标/启动图/480x762.png", /*高分屏启动图片，分辨率：480x762*/
+					"xhdpi": "D:/pro/参考/图标/启动图/720x1242.png",
+					"xxhdpi": "D:/pro/参考/图标/启动图/1080x1882.png"
 				}
 			},"debug":true
 		},
@@ -197,389 +197,539 @@
 			"rp": false,
 			"splash": false,
 			"push": false
-		}
+		},"adid":"127434280005"
 	},
 	"dependencies": {
-		"pages": {
-			"setting.html": {
-				"href": "setting.html",
-				"resources": [
-					"js/mui.min.js",
-					"js/mui.view.js",
-					"libs/easymob-webim-sdk/jquery-1.11.1.js",
-					"libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
-					"libs/easymob-webim-sdk/json2.js",
-					"libs/easymob-webim-sdk/easemob.im-1.0.5.js",
-					"js/feedback.js",
-					"js/feedback-page.js",
-					"js/mui.locker.js",
-					"js/app.js",
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/feedback-page.css",
-					"images/iconfont-tianjia.png",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/gateways.js",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/sjcl.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"login.html",
-					"buy.html",
-					"lock.html",
-					"accountlist.html",
-					"price.html",
-					"setting.html"
-				],
-				"priority": 1
-			},
-			"main.html": {
-				"href": "main.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"js/mui.min.js",
-					"js/app.js",
-					"price.html"
-				],
-				"refer": [
-					"setting.html",
-					"accountlist.html",
-					"lock.html",
-					"buy.html"
-				],
-				"priority": 1
-			},
-			"unlock.html": {
-				"href": "unlock.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"js/mui.min.js",
-					"js/mui.locker.js",
-					"js/app.js"
-				],
-				"refer": [
-					"login.html",
-					"main.html"
-				],
-				"priority": 0
-			},
-			"forget_password.html": {
-				"href": "forget_password.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/style.css",
-					"js/mui.min.js",
-					"js/app.js"
-				],
-				"priority": 1
-			},
-			"reg.html": {
-				"href": "reg.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/style.css",
-					"js/mui.min.js",
-					"js/app.js"
-				],
-				"refer": [
-					"login.html"
-				],
-				"priority": 3
-			},
-			"login.html": {
-				"href": "login.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/style.css",
-					"js/mui.min.js",
-					"js/mui.enterfocus.js",
-					"js/app.js",
-					"images/qihoo.png",
-					"images/qq.png",
-					"images/sinaweibo.png",
-					"images/weixin.png",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/jquery.js",
-					"js/sjcl.js",
-					"js/function.js",
-					"js/hx.js",
-					"assets/bitbox.one/BCN.png",
-					"assets/bitbox.one/usdt.png",
-					"assets/XLM/XLM.png"
-				],
-				"refer": [
-					"unlock.html",
-					"forget_password.html",
-					"main.html",
-					"reg.html",
-					"setlock.html",
-					"keypair.html",
-					"lock.html",
-					"login.html",
-					"active.html"
-				],
-				"priority": 0
-			},
-			"accountlist.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/gateways.js",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/sjcl.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"setting.html",
-					"buy.html",
-					"lock.html",
-					"price.html",
-					"accountlist.html",
-					"accounttransfer.html",
-					"effects.html"
-				],
-				"priority": 0
-			},
-			"keypair.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/jquery.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"login.html"
-				],
-				"priority": 0
-			},
-			"setlock.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/jquery.js",
-					"js/mui.min.js",
-					"js/mui.locker.js",
-					"js/function.js",
-					"js/app.js",
-					"js/sjcl.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"active.html",
-					"accountlist.html",
-					"login.html",
-					"main.html"
-				],
-				"priority": 0
-			},
-			"active.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/gateways.js",
-					"assets/coin.babelbank.com/BTC.png",
-					"assets/vcbear.net/JPY.png",
-					"assets/bitbox.one/usdt.png",
-					"assets/tempo.eu.com/EURT.png",
-					"assets/flutterwave.com/NGN.png",
-					"assets/cryptomover.com/cm3.png",
-					"assets/coin.babelbank.com/ETH.png",
-					"assets/vcbear.net/XRP.png",
-					"assets/bitbox.one/BCN.png",
-					"assets/cryptomover.com/cms.png",
-					"assets/bitcoinfundi.com/USD.png",
-					"assets/cryptomover.com/cmhkdt.png",
-					"assets/cryptomover.com/cm10.png",
-					"assets/bitcoinfundi.com/BTC.png",
-					"assets/vcbear.net/BTC.png",
-					"assets/bwow.io/usdt.png",
-					"assets/naobtc.com/BTC.png",
-					"assets/naobtc.com/XEL.png",
-					"assets/coin.babelbank.com/USDT.png",
-					"assets/coins.asia/PHP.png",
-					"assets/fchain.io/XCN.png",
-					"assets/cryptomover.com/cma.png",
-					"assets/ripplefox.com/CNY.png",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/sjcl.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"login.html",
-					"accountlist.html"
-				],
-				"priority": 0
-			},
-			"buy.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/gateways.js",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/app.js",
-					"js/sjcl.js",
-					"js/hx.js",
-					"images/waiting.svg"
-				],
-				"refer": [
-					"price.html",
-					"lock.html",
-					"accountlist.html",
-					"buy.html",
-					"setting.html",
-					"offer.html"
-				],
-				"priority": 0
-			},
-			"price.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/gateways.js",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/vue.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"addasset.html",
-					"accountlist.html",
-					"lock.html",
-					"buy.html",
-					"price.html",
-					"setting.html"
-				],
-				"priority": 0
-			},
-			"lock.html": {
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"js/jquery.js",
-					"js/mui.min.js",
-					"js/mui.locker.js",
-					"js/function.js",
-					"js/sjcl.js",
-					"js/hx.js"
-				],
-				"refer": [
-					"accountlist.html",
-					"buy.html",
-					"login.html",
-					"main.html"
-				],
-				"priority": 0
-			},
-			"addasset.html": {
-				"href": "addasset.html",
-				"resources": [
-					"css/mui.min.css",
-					"fonts/mui.ttf",
-					"css/icons-extra.css",
-					"fonts/mui-icons-extra.ttf",
-					"css/hx.css",
-					"libs/bower_components/stellar-sdk/stellar-sdk.js",
-					"libs/toml.min.js",
-					"js/gateways.js",
-					"js/jquery.js",
-					"js/template-web.js",
-					"js/mui.min.js",
-					"js/function.js",
-					"js/mui.enterfocus.js",
-					"js/sjcl.js",
-					"js/hx.js",
-					"images/waiting.svg"
-				],
-				"refer": [
-					"price.html",
-					"lock.html"
-				],
-				"priority": 1
-			},
-			"accounttransfer.html": {
-				"resources": [],
-				"refer": [
-					"lock.html"
-				],
-				"priority": 0
-			}
-		},
-		"idle": {
-			"resources": [
-				"js/balance.js",
-				"libs/bower_components/stellar-sdk/stellar-sdk.min.js",
-				"settingxxxxx.html",
-				"assets/fchain.io/TAU.png",
-				"new_file.js",
-				"libs/easymob-webim-sdk/quickstart.md",
-				"new_file.html",
-				"libs/bower_components/stellar-sdk/README.md",
-				"indexxxxxx.html",
-				"js/new_file.js",
-				"libs/bower_components/stellar-sdk/new_file.js",
-				"libs/bower_components/stellar-sdk/bower.json",
-				"price_beifen.html",
-				"assets/bitbox.one/BCN.jpg",
-				"libs/bower_components/stellar-sdk/new_file.html",
-				"libs/toml.js",
-				"assets/fchain.io/ETH.png",
-				"images/user-photo.png",
-				"assets/bwow.io/WCN.jpg",
-				"README.md"
-			]
-		}
+	  "pages": {
+	    "setting.html": {
+	      "href": "setting.html",
+	      "resources": [
+	        "js/mui.min.js",
+	        "js/mui.view.js",
+	        "libs/easymob-webim-sdk/jquery-1.11.1.js",
+	        "libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+	        "libs/easymob-webim-sdk/json2.js",
+	        "libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+	        "js/feedback.js",
+	        "js/feedback-page.js",
+	        "js/mui.locker.js",
+	        "js/app.js",
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/feedback-page.css",
+	        "images/iconfont-tianjia.png",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/hx.js",
+	        "js/update.js"
+	      ],
+	      "refer": [
+	        "login.html",
+	        "buy.html",
+	        "lock.html",
+	        "accountlist.html",
+	        "price.html",
+	        "setting.html"
+	      ],
+	      "priority": 1
+	    },
+	    "main.html": {
+	      "href": "main.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "js/mui.min.js",
+	        "js/app.js",
+	        "price.html",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "assets/smartlands.io/SLT.png",
+	        "assets/coin.babelbank.com/BTC.png",
+	        "assets/vcbear.net/JPY.png",
+	        "assets/bitbox.one/usdt.png",
+	        "assets/tempo.eu.com/EURT.png",
+	        "assets/cryptomover.com/cm3.png",
+	        "assets/flutterwave.com/NGN.png",
+	        "assets/coin.babelbank.com/ETH.png",
+	        "assets/vcbear.net/XRP.png",
+	        "assets/bitbox.one/BCN.png",
+	        "assets/XLM/XLM.png",
+	        "assets/cryptomover.com/cms.png",
+	        "assets/gft.network/GFT.svg",
+	        "assets/mobius.network/MOBI.png",
+	        "assets/bitcoinfundi.com/USD.png",
+	        "assets/cryptomover.com/cmhkdt.png",
+	        "assets/unknown/unknown.png",
+	        "assets/cryptomover.com/cm10.png",
+	        "assets/bitcoinfundi.com/BTC.png",
+	        "assets/vcbear.net/BTC.png",
+	        "assets/readycash.com.ng/NGN.png",
+	        "assets/bwow.io/usdt.png",
+	        "assets/naobtc.com/BTC.png",
+	        "assets/naobtc.com/XEL.png",
+	        "assets/coin.babelbank.com/USDT.png",
+	        "assets/coins.asia/PHP.png",
+	        "assets/fchain.io/XCN.png",
+	        "assets/cryptomover.com/cma.png",
+	        "assets/ripplefox.com/CNY.png",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/toml-js.js",
+	        "js/hx.js"
+	      ],
+	      "refer": [
+	        "setting.html",
+	        "accountlist.html",
+	        "lock.html",
+	        "buy.html",
+	        "price.html"
+	      ],
+	      "priority": 1
+	    },
+	    "unlock.html": {
+	      "href": "unlock.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "js/mui.min.js",
+	        "js/mui.locker.js",
+	        "js/app.js"
+	      ],
+	      "refer": [
+	        "login.html",
+	        "main.html"
+	      ],
+	      "priority": 0
+	    },
+	    "forget_password.html": {
+	      "href": "forget_password.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/style.css",
+	        "js/mui.min.js",
+	        "js/app.js"
+	      ],
+	      "priority": 1
+	    },
+	    "reg.html": {
+	      "href": "reg.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/style.css",
+	        "js/mui.min.js",
+	        "js/app.js"
+	      ],
+	      "refer": [
+	        "login.html"
+	      ],
+	      "priority": 3
+	    },
+	    "login.html": {
+	      "href": "login.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/style.css",
+	        "js/mui.min.js",
+	        "js/mui.enterfocus.js",
+	        "js/app.js",
+	        "images/qihoo.png",
+	        "images/qq.png",
+	        "images/sinaweibo.png",
+	        "images/weixin.png",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/jquery.js",
+	        "js/sjcl.js",
+	        "js/function.js",
+	        "js/hx.js",
+	        "assets/bitbox.one/BCN.png",
+	        "assets/bitbox.one/usdt.png",
+	        "assets/XLM/XLM.png",
+	        "assets/bitbox.one/sda.jpg",
+	        "assets/bitbox.one/xrp.png",
+	        "assets/bitbox.one/bcny.png"
+	      ],
+	      "refer": [
+	        "unlock.html",
+	        "forget_password.html",
+	        "main.html",
+	        "reg.html",
+	        "setlock.html",
+	        "keypair.html",
+	        "lock.html",
+	        "login.html",
+	        "active.html"
+	      ],
+	      "priority": 0
+	    },
+	    "accountlist.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/hx.js",
+	        "js/vue.js",
+	        "images/waiting2.gif"
+	      ],
+	      "refer": [
+	        "setting.html",
+	        "buy.html",
+	        "lock.html",
+	        "price.html",
+	        "accountlist.html",
+	        "accounttransfer.html",
+	        "effects.html",
+	        "recharge.html"
+	      ],
+	      "priority": 0
+	    },
+	    "keypair.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/jquery.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/hx.js"
+	      ],
+	      "refer": [
+	        "login.html"
+	      ],
+	      "priority": 0
+	    },
+	    "setlock.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/jquery.js",
+	        "js/mui.min.js",
+	        "js/mui.locker.js",
+	        "js/function.js",
+	        "js/app.js",
+	        "js/sjcl.js",
+	        "js/hx.js"
+	      ],
+	      "refer": [
+	        "active.html",
+	        "accountlist.html",
+	        "login.html",
+	        "main.html"
+	      ],
+	      "priority": 0
+	    },
+	    "active.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "assets/coin.babelbank.com/BTC.png",
+	        "assets/vcbear.net/JPY.png",
+	        "assets/bitbox.one/usdt.png",
+	        "assets/tempo.eu.com/EURT.png",
+	        "assets/flutterwave.com/NGN.png",
+	        "assets/cryptomover.com/cm3.png",
+	        "assets/coin.babelbank.com/ETH.png",
+	        "assets/vcbear.net/XRP.png",
+	        "assets/bitbox.one/BCN.png",
+	        "assets/cryptomover.com/cms.png",
+	        "assets/bitcoinfundi.com/USD.png",
+	        "assets/cryptomover.com/cmhkdt.png",
+	        "assets/cryptomover.com/cm10.png",
+	        "assets/bitcoinfundi.com/BTC.png",
+	        "assets/vcbear.net/BTC.png",
+	        "assets/bwow.io/usdt.png",
+	        "assets/naobtc.com/BTC.png",
+	        "assets/naobtc.com/XEL.png",
+	        "assets/coin.babelbank.com/USDT.png",
+	        "assets/coins.asia/PHP.png",
+	        "assets/fchain.io/XCN.png",
+	        "assets/cryptomover.com/cma.png",
+	        "assets/ripplefox.com/CNY.png",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/hx.js"
+	      ],
+	      "refer": [
+	        "login.html",
+	        "accountlist.html"
+	      ],
+	      "priority": 0
+	    },
+	    "buy.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/app.js",
+	        "js/sjcl.js",
+	        "js/hx.js",
+	        "images/waiting.svg",
+	        "images/waiting-small.svg",
+	        "js/vue.js",
+	        "images/waiting2.gif"
+	      ],
+	      "refer": [
+	        "price.html",
+	        "lock.html",
+	        "accountlist.html",
+	        "buy.html",
+	        "setting.html",
+	        "offer.html"
+	      ],
+	      "priority": 0
+	    },
+	    "price.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/vue.js",
+	        "js/hx.js",
+	        "images/waiting2.gif"
+	      ],
+	      "refer": [
+	        "addasset.html",
+	        "accountlist.html",
+	        "lock.html",
+	        "buy.html",
+	        "price.html",
+	        "setting.html"
+	      ],
+	      "priority": 0
+	    },
+	    "lock.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/jquery.js",
+	        "js/mui.min.js",
+	        "js/mui.locker.js",
+	        "js/function.js",
+	        "js/sjcl.js",
+	        "js/hx.js"
+	      ],
+	      "refer": [
+	        "accountlist.html",
+	        "buy.html",
+	        "login.html",
+	        "main.html"
+	      ],
+	      "priority": 0
+	    },
+	    "addasset.html": {
+	      "href": "addasset.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "libs/toml.min.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/hx.js",
+	        "images/waiting.svg",
+	        "js/toml-js.js",
+	        "js/vue.js",
+	        "images/waiting2.gif"
+	      ],
+	      "refer": [
+	        "price.html",
+	        "lock.html"
+	      ],
+	      "priority": 1
+	    },
+	    "accounttransfer.html": {
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "images/waiting-small.svg",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/vue.js",
+	        "js/hx.js",
+	        "images/waiting2.gif"
+	      ],
+	      "refer": [
+	        "lock.html"
+	      ],
+	      "priority": 0
+	    },
+	    "offer.html": {
+	      "href": "offer.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "css/offer.css",
+	        "images/jiantuo.svg",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/vue.js",
+	        "js/sjcl.js",
+	        "js/hx.js",
+	        "images/waiting2.gif"
+	      ],
+	      "priority": 1
+	    },
+	    "recharge.html": {
+	      "href": "recharge.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/vue.js",
+	        "js/hx.js",
+	        "images/waiting2.svg",
+	        "images/bitboxqr.jpg"
+	      ],
+	      "priority": 3
+	    },
+	    "effects.html": {
+	      "href": "effects.html",
+	      "resources": [
+	        "css/mui.min.css",
+	        "fonts/mui.ttf",
+	        "css/icons-extra.css",
+	        "fonts/mui-icons-extra.ttf",
+	        "css/hx.css",
+	        "libs/bower_components/stellar-sdk/stellar-sdk.js",
+	        "js/gateways.js",
+	        "js/jquery.js",
+	        "js/template-web.js",
+	        "js/mui.min.js",
+	        "js/function.js",
+	        "js/mui.enterfocus.js",
+	        "js/sjcl.js",
+	        "js/vue.js",
+	        "js/hx.js",
+	        "images/waiting2.svg"
+	      ],
+	      "priority": 5
+	    }
+	  },
+	  "idle": {
+	    "resources": [
+	      "js/balance.js",
+	      "libs/bower_components/stellar-sdk/stellar-sdk.min.js",
+	      "assets/fchain.io/TAU.png",
+	      "libs/easymob-webim-sdk/quickstart.md",
+	      "new_file.js",
+	      "new_file.html",
+	      "libs/bower_components/stellar-sdk/README.md",
+	      "js/new_file.js",
+	      "libs/bower_components/stellar-sdk/new_file.js",
+	      "libs/bower_components/stellar-sdk/bower.json",
+	      "price_beifen.html",
+	      "new_file2.js",
+	      "libs/toml.js",
+	      "assets/bitbox.one/BCN.jpg",
+	      "libs/bower_components/stellar-sdk/new_file.html",
+	      "new_file3.js",
+	      "assets/fchain.io/ETH.png",
+	      "assets/bwow.io/WCN.jpg",
+	      "images/user-photo.png",
+	      "README.md"
+	    ]
+	  }
 	},
 	"unpackage": [
-		"README.md"
-	]
+	  "README.md",
+	  "js/balance.js",
+	  "js/new_file.js",
+	  "new_file.html",
+	  "new_file.js",
+	  "new_file2.js",
+	  "new_file3.js",
+	  "price_beifen.html"
+	],"fullscreen":false
 }

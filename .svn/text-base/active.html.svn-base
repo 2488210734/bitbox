@@ -18,6 +18,14 @@
 			.active-content{ line-height: 1.6em;}
 			#publickey{word-break:break-all; padding-bottom: 10px; line-height: 1.2em;}
 			h4{ margin-top: 25px;}
+			.ewm {
+				padding: 15px 30px;
+			}
+			
+			.ewm img {
+				width: 100%;
+				height: auto
+			}
 		</style>
 
 	</head>
@@ -37,10 +45,12 @@
 				<div>转入<span class="red">3xlm</span>到您的钱包地址即可激活。</div>
 				<h4>可通过以下方法了解激活方法：</h4>
 				<ol>
-					<li>微信群：请添加微信xxx</li>
-					<li>QQ群：</li>
-					<li>电报群：</li>
+					<li>QQ群：488388376</li>
+					<li>微信：加此微信后入群</li>
 				</ol>
+				<div class="ewm">
+					<img src="images/bitboxqr.jpg" alt="bitbox微信二维码" id="bitboxqr" />
+				</div>
 			</div>
 
 		</div>

@@ -31,7 +31,7 @@ hx.js
 K 25
 svn:wc:ra_dav:version-url
 V 39
-/svn/bitbox/!svn/ver/16/bitbox/js/hx.js
+/svn/bitbox/!svn/ver/18/bitbox/js/hx.js
 END
 app.js
 K 25
@@ -49,7 +49,7 @@ gateways.js
 K 25
 svn:wc:ra_dav:version-url
 V 45
-/svn/bitbox/!svn/ver/14/bitbox/js/gateways.js
+/svn/bitbox/!svn/ver/18/bitbox/js/gateways.js
 END
 feedback.js
 K 25
@@ -67,7 +67,7 @@ function.js
 K 25
 svn:wc:ra_dav:version-url
 V 45
-/svn/bitbox/!svn/ver/15/bitbox/js/function.js
+/svn/bitbox/!svn/ver/18/bitbox/js/function.js
 END
 balance.js
 K 25

@@ -121,7 +121,7 @@
 			<div class="mui-content">
 				<div class="mui-content-padded">
 					<div class="mui-input-row asset-search">
-						<input type="input" class="mui-input" id="input-domain" placeholder="example:xxxx.com">
+						<input type="input" class="mui-input" id="input-domain" value="bitbox.one" placeholder="example:xxxx.com">
 						<button class="mui-btn" id="search-asset-btn"><i></i>搜索</button>
 					</div>
 				</div>
@@ -135,7 +135,7 @@
 							<img class="mui-media-object mui-pull-left" :src="item.image">
 							<div class="mui-media-body">
 								<span class="code">{{item.code}}</span> <i class="website">{{item.website}}</i>
-								<p class="issuer">{{item.issuer}}</p>
+								<p>{{formateissuer(item.issuer)}}</p>
 							</div>
 						</div>
 						<div class="price">
@@ -200,15 +200,19 @@
 					methods: {
 						getdata: function() {
 							var ts = this;
-							$.when($.iaccount.getbalance())
+							$.iaccount.getbalance()
 								.then(function(x) {
 									ts.alldata = x;
+									//console.log(JSON.stringify(ts.alldata));
+									//console.log(JSON.stringify($.defaultpricelist));
 
 									///添加默认货币
 									var delnum = [];
 									$.each($.defaultpricelist, function(index, value) {
+										
 										$.each(x, function(i, v) {
 											if(!!v && !!value && v.code == value.code && v.issuer == value.issuer) {
+												//console.log(JSON.stringify(value));
 												delnum.push(index);
 											}
 										});
@@ -217,14 +221,18 @@
 									for(var i = delnum.length - 1; i >= 0; i--) {
 										$.defaultpricelist.splice(delnum[i], 1);
 									}
+									//console.log(JSON.stringify($.defaultpricelist));
 
-									if($.defaultpricelist.length > 0) {
-										ts.alldata.unshift($.defaultpricelist);
-									}
-
+									if($.defaultpricelist.length > 0) {										
+										$.each($.defaultpricelist, function(index, value) {
+											ts.alldata.unshift($.defaultpricelist[index]);
+										})
+									}																		
+									
 									$.each(ts.alldata, function(index, value) {
 										!ts.alldata[index].isactive ? ts.alldata[index].isactive = "1" : ts.alldata[index].isactive = "-1";
 									});
+									
 
 									$("body").removeClass("lock");
 								})
@@ -272,12 +280,22 @@
 									})
 									.catch(function(e) {
 										$("body").removeClass("lock");
-										mui.toast('更改失败，请稍后重试！');
+										if(e.data.extras.result_codes.operations[0]=="op_low_reserve"){
+											mui.alert("可能原因：您的余额不足","更改失败");
+										}else{
+											mui.toast('更改失败，请稍后重试！');
+										}
+
 										console.log(JSON.stringify(e));
 										item.isactive = (-parseInt(ks)).toString();
 										Vue.set(ts.alldata, index, item);
 									});
 							});
+						},
+						formateissuer:function(issuer){
+							if(issuer){
+								return issuer.substr(0,5)+'***'+issuer.substr(-4,4);								
+							}
 						}
 					}
 				})

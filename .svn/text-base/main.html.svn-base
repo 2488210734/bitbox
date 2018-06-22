@@ -9,14 +9,19 @@
 		<link rel="stylesheet" href="css/icons-extra.css" />
 		<link href="css/hx.css" rel="stylesheet" />
 		<style>
-
+			.jia {
+				font-size: 32px;
+				line-height: 36px;
+				padding: 0 10px 0 0;
+				margin: 0;
+			}
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
-			<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right reloadsub">刷新</button>
+			<div class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" id="tools"><span class="reloadsub">刷新</span></div>
 			<h1 id="title" class="mui-title">钱包</h1>
 		</header>
 
@@ -50,7 +55,6 @@
 		<script src="js/toml-js.js"></script>
 		<script src="js/hx.js"></script>
 		<script>
-			
 			//$.toml.getbydomain("bitbox.one");
 			mui.init();
 			var subpages = ['price.html', 'buy.html', 'accountlist.html', 'setting.html'];
@@ -58,6 +62,19 @@
 				top: '45px',
 				bottom: '51px'
 			};
+			var subpage_tools = [{
+				'text': '<span class="jia">+</span>',
+				'url': 'addasset.html'
+			}, {
+				'text': '委托兑换',
+				'url': 'offer.html'
+			}, {
+				'text': '',
+				'url': ''
+			}, {
+				'text': '',
+				'url': ''
+			}];
 
 			var aniShow = {};
 
@@ -65,14 +82,13 @@
 			mui.plusReady(function() {
 
 				$.checkuser();
-				
+
 				//console.log(JSON.stringify($.getItem("alldata")));
 				//setTimeout($.iaccount.pricelist.setall,50);//迟0.05秒再ajax	
 				/*$.when($.iaccount.getpricelist())
 				.then(function(x){
 					console.log(JSON.stringify(x));
 				});*/
-
 
 				var self = plus.webview.currentWebview();
 				for(var i = 0; i < 4; i++) {
@@ -93,6 +109,19 @@
 					console.log(page);
 				})*/
 
+				function networktip() {
+					var network = plus.networkinfo.getCurrentType();
+					if(network < 3) {
+						mui.toast("当前网络已断开，请检查您的设置！");
+					} else if(network > 3) {
+						mui.toast("当前使用移动网络，请注意流量!");
+					}
+				}
+								
+				networktip();
+				document.addEventListener("netchange,resume", function() {
+					networktip();
+				})
 			});
 			//当前激活选项
 			var activeTab = subpages[2];
@@ -105,6 +134,11 @@
 				}
 				//更换标题
 				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+
+				//更换顶部右侧按钮
+				var ind = $(this).index();
+				$("#tools").html("<a _href='" + subpage_tools[ind].url + "'>" + subpage_tools[ind].text + "</a>");
+
 				//显示目标选项卡
 				//若为iOS平台或非首次显示，则直接显示
 				if(mui.os.ios || aniShow[targetTab]) {
@@ -118,13 +152,13 @@
 				}
 				//隐藏当前;
 				plus.webview.hide(activeTab);
-				
+
 				//自定义添加
-				var activeview= plus.webview.getWebviewById(activeTab);
-				mui.fire(activeview,'endInterval',{});				
-				var targetview= plus.webview.getWebviewById(targetTab);
-				mui.fire(targetview,'startInterval',{});
-				
+				var activeview = plus.webview.getWebviewById(activeTab);
+				mui.fire(activeview, 'endInterval', {});
+				var targetview = plus.webview.getWebviewById(targetTab);
+				mui.fire(targetview, 'startInterval', {});
+
 				//更改当前活跃的选项卡
 				activeTab = targetTab;
 			});
@@ -133,7 +167,7 @@
 			mui('.mui-bar-nav').on('tap', '.reloadsub', function(e) {
 				var h = plus.webview.getWebviewById(activeTab);
 				h.reload();
-				mui.fire(h,'startInterval',{});
+				mui.fire(h, 'startInterval', {});
 			});
 			//自定义事件，模拟点击“首页选项卡”
 			document.addEventListener('gohome', function() {

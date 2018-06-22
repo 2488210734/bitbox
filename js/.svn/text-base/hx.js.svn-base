@@ -148,13 +148,23 @@
 
 		/*我的资产*/
 		$.iaccount = {
+			//targerAsset:定义兑换价格标准，这里以bcny作为基准！！！
 			server: new StellarSdk.Server($.apiaddress),
 			sourcePublicKey: $.getsourcePublicKey(),
+			targerAsset: new StellarSdk.Asset("BCNY", "GBCNYBHAAPDSU3UIHXXQTHYZVSBJBI4YUNWXMKJBCPDHTVYR75G6NFHD"),
+			xrppath: {//定义XRP货币的转换路径
+				'from': new StellarSdk.Asset('XRP', 'GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S'),
+				'path': [
+					new StellarSdk.Asset('USDT', 'GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S'),
+					new StellarSdk.Asset.native(),
+					new StellarSdk.Asset("BCNY", "GBCNYBHAAPDSU3UIHXXQTHYZVSBJBI4YUNWXMKJBCPDHTVYR75G6NFHD")
+				]
+			},
 			getaccount: function() {
 				var dtd = $.Deferred();
 				this.server.loadAccount(this.sourcePublicKey)
 					.catch(function(e) {
-						console.error(e);
+						console.error(JSON.stringify(e));
 					})
 					.then(function(account) {
 						dtd.resolve(account);
@@ -163,78 +173,138 @@
 			},
 			getbalance: function() {
 				var dtd = $.Deferred();
+				var defer = $.Deferred(); //循环用到的异步
+				defer.resolve();
+				var obj_get = [];
 				this.getaccount().then(function(account) {
-					var k = 1;
-					var obj_get = [];
-					$.each(account.balances, function(index, value) {
-						k++;
+
+					var balances = account.balances;
+
+					//这里先排序，后面按顺序获取
+					var XLM = [];
+					$.each(balances, function(index, value) {
+						if(value.asset_type == "native") {
+							XLM = balances.splice(index, 1); //从数组中移除xlm后面再插在首位
+						}
+					});
+
+					balances = balances.sort(compare('asset_code')); //先按首字母排序
+					balances.unshift(XLM[0]);
+
+					$.each(balances, function(index, value) {
+
 						var obj_price = {};
-						if(value.asset_type == "native") { //XCN								
+						if(value.asset_type == "native") { //
 							obj_price.code = "XLM";
 							obj_price.balance = value.balance;
 							obj_price.website = "Stellar Network";
-							obj_price.price = "1.0000000";
+							//obj_price.price = "1.0000000";
 							obj_price.issuer = "";
 							obj_price.image = "assets/XLM/XLM.png";
 							obj_price.type = "native";
 							obj_get.push(obj_price);
-						} else {
+						}
+						/*}else if(value.asset_code==bcny.code, value.asset_issuer==bcny.issuer){
+							
+						}*/ else {
 
-							$.when($.iaccount.getimgbyasset(value.asset_code, value.asset_issuer))
-								.catch(function(e) {
-									console.error(e);
-								})
-								.then(function(img_obj) {
-									//console.log("获取资产中");
-									obj_price.balance = value.balance;
-									obj_price.code = value.asset_code;
-									obj_price.issuer = value.asset_issuer;
-									obj_price.website = img_obj.website;
-									obj_price.image = img_obj.image;
-									//obj_price.price = 0;
-									obj_get.push(obj_price);
+							defer = defer.then(function() {
 
-									if(k >= account.balances.length) {
-										obj_get = obj_get.sort(compare('code')); //先按首字母排序
+								var ddd = $.Deferred();
+								$.iaccount.getimgbyasset(value.asset_code, value.asset_issuer)
+									.catch(function(e) {
+										console.error(JSON.stringify(e));
+									})
+									.then(function(img_obj) {
+										//console.log("获取资产中");
 
-										$.each(obj_get, function(index, value) {
-											if(value.code == "XLM") {
-												var str = obj_get.splice(index, 1);
-												obj_get.unshift(str[0]); //删除再在开头插入native
-												return false;
-											}
-										});
-										//console.log(JSON.stringify(obj_get));
-										dtd.resolve(obj_get);
-									}
-								})
+										obj_price.balance = value.balance;
+										obj_price.code = value.asset_code;
+										obj_price.issuer = value.asset_issuer;
+										obj_price.website = img_obj.website;
+										obj_price.image = img_obj.image;
+										//obj_price.price = 0;
+										//console.log(JSON.stringify(value.asset_code));
+										obj_get.push(obj_price);
+										ddd.resolve();
+									})
+								return ddd.promise();
+							});
 						}
 					});
+
+					defer.then(function() {
+						//console.log(JSON.stringify(obj_get));
+						dtd.resolve(obj_get);
+					})
+
 				});
 
 				return dtd.promise();
 			},
-			getprice: function(code, issuer, asset) {//asset为目标货币，为空则为XLM
+			getbuyandsell: function(selfasset, asset){ //获取买价和卖价，asset为目标货币，为空则为XLM
 				var dtd = $.Deferred();
 				var targetasset = !!asset ? asset : new StellarSdk.Asset.native();
-				this.server.orderbook(targetasset, new StellarSdk.Asset(code, issuer))
+				this.server.orderbook(targetasset, selfasset)
 					.call()
-					.catch(function(e){
+					.catch(function(e) {
 						console.log(JSON.stringify(e));
 					})
 					.then(function(resp) {
-						//console.log(resp);
-						var aveprice = 0;
-						if(resp.asks.length != 0 && resp.bids.length != 0) {
-							aveprice = (parseFloat(resp.asks[0].price) / 2 + parseFloat(resp.bids[0].price) / 2).toFixed(7);
-						} else if(resp.asks.length != 0) {
-							aveprice = parseFloat(resp.asks[0].price).toFixed(7);
-						} else if(resp.bids.length != 0) {
-							aveprice = parseFloat(resp.bids[0].price).toFixed(7);
+						
+						var _obj = {};
+						if(resp.asks.length != 0 && resp.bids.length != 0) {//买价和卖价同时存在
+						
+							_obj.bids = parseFloat(resp.bids[0].price).toFixed(7);
+							_obj.asks = parseFloat(resp.asks[0].price).toFixed(7);
 						}
-						//console.log(JSON.stringify(aveprice));
-						dtd.resolve(aveprice);
+						dtd.resolve(_obj);
 					});
+				return dtd.promise();
+			},
+			getprice: function(selfasset, asset) { //asset为目标货币，为空则为XLM						
+				var dtd = $.Deferred();
+				this.getbuyandsell(selfasset, asset).then(function(rex){
+					var aveprice = 0;
+					if(JSON.stringify(rex)!="{}"){
+						aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
+					}
+					dtd.resolve(aveprice);
+				});
+				return dtd.promise();
+			},
+			getpriceTarget: function(selfasset){//以某种货币为基准计算价格，这里以bcny为基准
+				var dtd = $.Deferred();
+				var targerAsset = this.targerAsset;		
+				var ts = this;
+				if(selfasset.code==this.targerAsset.code && selfasset.issuer==this.targerAsset.issuer){
+					dtd.resolve("1.0000000");//基准货币bcny的价格定为1
+				}else if(selfasset.code==this.xrppath.from.code && selfasset.issuer==this.xrppath.from.issuer){
+					//XRP货币使用特殊路径计算价格
+					var ts = this;
+					var path1 = this.getprice(selfasset,ts.xrppath.path[0]);
+					var path2 = this.getprice(ts.xrppath.path[0],ts.xrppath.path[1]);
+					var path3 = this.getprice(ts.xrppath.path[1],ts.xrppath.path[2]);
+					$.when(path1,path2,path3).then(function(a,b,c){
+						dtd.resolve((parseFloat(a)*parseFloat(b)*parseFloat(c)).toFixed(7));
+					})
+				}
+				else{
+				this.getbuyandsell(selfasset, targerAsset).then(function(rex){
+					//买卖价格相差小于10%直接兑换
+					if(JSON.stringify(rex)!="{}" && parseFloat(rex.asks)/parseFloat(rex.bids) < 1.10){
+						var aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
+						dtd.resolve(aveprice);
+					}else{
+						$.when(ts.getprice(selfasset),ts.getprice(new StellarSdk.Asset.native(),targerAsset))
+						.then(function(a,b){
+							var aveprice = (parseFloat(a)*parseFloat(b)).toFixed(7);
+							dtd.resolve(aveprice);
+						})
+					}
+					
+				});
+				}
 				return dtd.promise();
 			},
 			getpricelist: function() {
@@ -256,139 +326,130 @@
 
 							if(i + 1 >= balancelist.length) {
 
-								returnlist = returnlist.sort(compare('code')); //先按首字母排序
-								$.each(returnlist, function(index, value) {
-									if(value.code == "XLM") {
-										var str = returnlist.splice(index, 1);
-										returnlist.unshift(str[0]); //删除再在开头插入native
-										return false;
-									}
-								});
-
 								dtd.resolve(returnlist);
 							}
 						});
 
 					});
-				}).catch(function(e){
+				}).catch(function(e) {
 					console.log(JSON.stringify(e));
 				})
 
 				return dtd.promise();
 			},
-			pathprice: function(code,issuer,asset){//asset为中间货币
-				var ts=this;
+			pathprice: function(code, issuer, asset) { //asset为中间货币
+				var ts = this;
 				var dtd = $.Deferred()
-				ts.getprice(code,issuer,asset).then(function(rexp){
+				ts.getprice(code, issuer, asset).then(function(rexp) {
 					//console.log(rexp);
-					ts.getprice(asset.code,asset.issuer).then(function(rexp2){
+					ts.getprice(asset.code, asset.issuer).then(function(rexp2) {
 						//console.log('第二次价格是');
 						//console.log(rexp2);
-						dtd.resolve((parseFloat(rexp2)*parseFloat(rexp)).toFixed(7));
+						dtd.resolve((parseFloat(rexp2) * parseFloat(rexp)).toFixed(7));
 					})
-				}).catch(function(e){
+				}).catch(function(e) {
 					console.log(JSON.stringify(e));
 				});
 				return dtd.promise();
 			},
-//			pricelist: {//以前的方法，已不用
-//				get: function(callback) { //请求返回价格，需请求多次
-//					var server = new StellarSdk.Server($.apiaddress);
-//					var sourcePublicKey = $.getsourcePublicKey();
-//
-//					server.loadAccount(sourcePublicKey) //请求返回资产
-//						.catch(function(e) {
-//							//console.log(JSON.stringify(e));
-//							console.error(e);
-//						})
-//						.then(function(account) {
-//							if(!account) {
-//								return false;
-//							}
-//
-//							obj_get = {};
-//							obj_get.data = [];
-//							//console.log(account);
-//
-//							var balances_arr = account.balances;
-//							var k = 1;
-//
-//							$.each(balances_arr, function(index, value) { //循环请求，返回每一项
-//								k++;
-//								var obj_price = {};
-//								if(value.asset_type == "native") { //XCN								
-//									obj_price.code = "XLM";
-//									obj_price.balance = value.balance;
-//									obj_price.website = "Stellar Network";
-//									obj_price.price = "1.0000000";
-//									obj_price.issuer = "";
-//									obj_price.image = "assets/XLM/XLM.png";
-//									obj_price.type = "native";
-//									obj_get.data.push(obj_price);
-//								} else {
-//
-//									var dtd = $.Deferred();
-//
-//									$.when()
-//										.then(function() {
-//											var sss = $.iaccount.getimgbyasset(value.asset_code, value.asset_issuer);
-//											if(sss) return sss;
-//										})
-//										.then(function(img_obj) {
-//											obj_price.balance = value.balance;
-//											obj_price.code = value.asset_code;
-//											obj_price.issuer = value.asset_issuer;
-//											obj_price.website = img_obj.website;
-//											obj_price.image = img_obj.image;
-//
-//											obj_get.data.push(obj_price);
-//
-//											if(k >= balances_arr.length) {
-//
-//												//console.log(obj_get);
-//												//全部返回了再进行排序
-//												obj_get.data = obj_get.data.sort(compare('code')); //先按首字母排序
-//
-//												$.each(obj_get.data, function(index, value) {
-//													if(value.code == "XLM") {
-//														var str = obj_get.data.splice(index, 1);
-//														obj_get.data.unshift(str[0]); //删除再在开头插入native
-//														return false;
-//													}
-//												});
-//												//obj_get.account = account;
-//												//console.log(JSON.stringify(obj_get));
-//												callback(obj_get, account);
-//
-//											}
-//
-//										})
-//
-//								}
-//
-//							});
-//
-//						});
-//				},
-//				isactive: true,
-//				setall: function() {
-//					if($.iaccount.pricelist.isactive) {
-//						$.iaccount.pricelist.get(function(_obj) {
-//							$.objItem.setobjItem("alldata", _obj);
-//							//console.log("正在获取数据...");
-//							setTimeout($.iaccount.pricelist.setall, 8000);
-//						});
-//
-//					} else {
-//						setTimeout($.iaccount.pricelist.setall, 8000);
-//					}
-//
-//				},
-//				getall: function() {
-//					return $.objItem.getobjItem("alldata") || {};
-//				}
-//
-//			},
+			//			pricelist: {//以前的方法，已不用
+			//				get: function(callback) { //请求返回价格，需请求多次
+			//					var server = new StellarSdk.Server($.apiaddress);
+			//					var sourcePublicKey = $.getsourcePublicKey();
+			//
+			//					server.loadAccount(sourcePublicKey) //请求返回资产
+			//						.catch(function(e) {
+			//							//console.log(JSON.stringify(e));
+			//							console.error(e);
+			//						})
+			//						.then(function(account) {
+			//							if(!account) {
+			//								return false;
+			//							}
+			//
+			//							obj_get = {};
+			//							obj_get.data = [];
+			//							//console.log(account);
+			//
+			//							var balances_arr = account.balances;
+			//							var k = 1;
+			//
+			//							$.each(balances_arr, function(index, value) { //循环请求，返回每一项
+			//								k++;
+			//								var obj_price = {};
+			//								if(value.asset_type == "native") { //XCN								
+			//									obj_price.code = "XLM";
+			//									obj_price.balance = value.balance;
+			//									obj_price.website = "Stellar Network";
+			//									obj_price.price = "1.0000000";
+			//									obj_price.issuer = "";
+			//									obj_price.image = "assets/XLM/XLM.png";
+			//									obj_price.type = "native";
+			//									obj_get.data.push(obj_price);
+			//								} else {
+			//
+			//									var dtd = $.Deferred();
+			//
+			//									$.when()
+			//										.then(function() {
+			//											var sss = $.iaccount.getimgbyasset(value.asset_code, value.asset_issuer);
+			//											if(sss) return sss;
+			//										})
+			//										.then(function(img_obj) {
+			//											obj_price.balance = value.balance;
+			//											obj_price.code = value.asset_code;
+			//											obj_price.issuer = value.asset_issuer;
+			//											obj_price.website = img_obj.website;
+			//											obj_price.image = img_obj.image;
+			//
+			//											obj_get.data.push(obj_price);
+			//
+			//											if(k >= balances_arr.length) {
+			//
+			//												//console.log(obj_get);
+			//												//全部返回了再进行排序
+			//												obj_get.data = obj_get.data.sort(compare('code')); //先按首字母排序
+			//
+			//												$.each(obj_get.data, function(index, value) {
+			//													if(value.code == "XLM") {
+			//														var str = obj_get.data.splice(index, 1);
+			//														obj_get.data.unshift(str[0]); //删除再在开头插入native
+			//														return false;
+			//													}
+			//												});
+			//												//obj_get.account = account;
+			//												//console.log(JSON.stringify(obj_get));
+			//												callback(obj_get, account);
+			//
+			//											}
+			//
+			//										})
+			//
+			//								}
+			//
+			//							});
+			//
+			//						});
+			//				},
+			//				isactive: true,
+			//				setall: function() {
+			//					if($.iaccount.pricelist.isactive) {
+			//						$.iaccount.pricelist.get(function(_obj) {
+			//							$.objItem.setobjItem("alldata", _obj);
+			//							//console.log("正在获取数据...");
+			//							setTimeout($.iaccount.pricelist.setall, 8000);
+			//						});
+			//
+			//					} else {
+			//						setTimeout($.iaccount.pricelist.setall, 8000);
+			//					}
+			//
+			//				},
+			//				getall: function() {
+			//					return $.objItem.getobjItem("alldata") || {};
+			//				}
+			//
+			//			},
 			getbalancebyasset: function(asset, accountlist) { //通过asset取得资产方法
 				var _balance = 0;
 				$.each(accountlist, function(index, value) {
@@ -399,17 +460,22 @@
 				});
 				return _balance;
 			},
-			getimgbyasset: function(code, issuer) {
+			getimgbyasset: function(code, issuer, type) {
 				var _source = gateways.getSourceById(issuer); //从gateways.js获取图标和域名信息
 				var dtd = $.Deferred();
 
 				var img_obj = {};
-				$.each(_source.assets, function(index, value) {
-					if(index == code && !!value.image) {
-						img_obj.image = value.image;
-						img_obj.website = _source.name.replace("https://", "");
-					}
-				});
+				if(type == 'native') {
+					img_obj.image = "assets/XLM/XLM.png";
+					img_obj.website = "Stellar Network";
+				} else {
+					$.each(_source.assets, function(index, value) {
+						if(index == code && !!value.image) {
+							img_obj.image = value.image;
+							img_obj.website = _source.name.replace("https://", "");
+						}
+					});
+				}
 
 				//console.log(JSON.stringify(img_obj));
 				//如果货币在gateways找不到
@@ -432,7 +498,10 @@
 								img_obj.website = _data.website.replace("https://", "");
 								//console.log(JSON.stringify(img_obj));
 								dtd.resolve(img_obj);
-							})
+							}).catch(function(e) {
+								console.log(code);
+								console.error(e);
+							});
 					}
 
 				} else {
@@ -471,7 +540,9 @@
 							})
 					})
 					.catch(function(e) {
-						console.error(e);
+						console.log(code);
+						console.log(issuer);
+						console.error(JSON.stringify(e));
 					});
 
 				return dtd.promise();
@@ -490,18 +561,36 @@
 		}
 
 		$.defaultpricelist = [{ //定义默认强行显示的货币************测试数据，待更新
-				code: "BCN",
-				image: "assets/bitbox.one/BCN.png",
+				code: "BCNY",
+				image: "assets/bitbox.one/bcny.png",
 				issuer: "GBCNYBHAAPDSU3UIHXXQTHYZVSBJBI4YUNWXMKJBCPDHTVYR75G6NFHD",
-				name: "BCN",
-				website: "bitbox.one"
+				name: "BCNY",
+				website: "bitbox.one",
+				isactive: "-1"
 			},
 			{
 				code: "USDT",
 				image: "assets/bitbox.one/usdt.png",
 				issuer: "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S",
 				name: "USDT",
-				website: "bitbox.one"
+				website: "bitbox.one",
+				isactive: "-1"
+			},
+			{
+				code: "XRP",
+				image: "assets/bitbox.one/xrp.png",
+				issuer: "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S",
+				name: "XRP",
+				website: "bitbox.one",
+				isactive: "-1"
+			},
+			{
+				code: "SDA",
+				image: "assets/bitbox.one/sda.jpg",
+				issuer: "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S",
+				name: "SDA",
+				website: "bitbox.one",
+				isactive: "-1"
 			}
 		];
 

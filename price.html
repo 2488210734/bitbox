@@ -45,11 +45,11 @@
 			}
 			
 			h3.th span:nth-child(1) {
-				width: 70%;
+				width: 65%;
 			}
 			
 			h3.th span:nth-child(2) {
-				width: 30%;
+				width: 35%;
 			}
 			
 			.th~ul li {
@@ -57,18 +57,23 @@
 			}
 			
 			.th~ul li .zc {
-				width: 70%;
+				width: 65%;
 				float: left;
 			}
 			
 			.th~ul li .price {
-				width: 30%;
+				width: 35%;
+				flex: 1;
 				float: right;
 				text-align: center;
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				margin-right: -10px;
+			}
+			
+			.th~ul li .zc .mui-media-body.isxlm {
+				padding-top: 9px;
 			}
 			
 			.th~ul li .zc p {
@@ -111,17 +116,17 @@
 
 		<div id="app" v-cloak>
 			<div class="mui-content">
-				<h3 class="th"><span>货币</span><span>价格</span></h3>
+				<h3 class="th"><span>货币</span><span>价格(BCNY)</span></h3>
 				<ul class="mui-table-view" id="pricelist">
 					<li class="mui-table-view-cell" v-for="item in alldata">
 						<div class="zc">
 							<img class="mui-media-object mui-pull-left" :src="item.image">
-							<div class="mui-media-body">
+							<div class="mui-media-body" :class="{isxlm:item.code=='XLM'}">
 								{{item.code}} <i>{{item.website}}</i>
-								<p>{{item.issuer}}</p>
+								<p>{{formateissuer(item.issuer)}}</p>
 							</div>
 						</div>
-						<div class="price">{{item.price}}</div>
+						<div class="price">{{formatenum(1/parseFloat(item.price),7)}}</div>
 					</li>
 				</ul>
 			</div>
@@ -183,7 +188,7 @@
 						getdata: function(numfirst) {
 							//if($.timecheck()) return true; //加入时间间隔防止webview show有时会重复触发多次
 
-							console.log("尝试获取数据...");
+							//console.log("尝试获取数据...");
 							var ts = this;
 							$.when($.iaccount.getbalance()).then(function(balancelist) {
 									$("body").removeClass("lock");
@@ -193,8 +198,6 @@
 										var _obj = value;
 										if(numfirst == true && !value.price) { //第一次默认为0，后面读取旧数据，再ajax更新数据防止跳动
 											_obj.price = 0;
-										} else if(value.code == "XLM") {
-											_obj.price = "1.0000000";
 										} else {
 											try { //这里用try，因为增加或删除资产后造成index改变，先让它为0等待ajax回传的price
 												_obj.price = ts.alldata[index].price;
@@ -203,28 +206,10 @@
 											}
 										}
 										_arr.push(value);
-
-										if(value.code == "XLM") return true;
-
-										var ispath = false;//是否需要从路径转换价格
-										$.each(path_arr, function(i, v) {
-											if(v.from.code == value.code && v.from.issuer == value.issuer) {
-												//console.log(value.code);
-												$.iaccount.pathprice(value.code, value.issuer, v.path)
-												.then(function(x){
-													ts.$set(ts.alldata[index], 'price', x);
-												})
-												
-												ispath = true;
-											}
-										})
-
-										if(!ispath) {
-											$.iaccount.getprice(value.code, value.issuer).then(function(x) {
+											$.iaccount.getpriceTarget(new StellarSdk.Asset(value.code, value.issuer)).then(function(x) {
 												//console.log(JSON.stringify(x));
 												ts.$set(ts.alldata[index], 'price', x);
 											});
-										}
 
 									});
 
@@ -234,7 +219,15 @@
 									$("body").removeClass("lock");
 									console.log(JSON.stringify(e));
 								})
-						}
+						},
+						formateissuer:function(issuer){
+							if(issuer){
+								return issuer.substr(0,5)+'***'+issuer.substr(-4,4);								
+							}
+						},
+						formatenum: function(n, m) {
+							return parseFloat(n).toFixed(m);
+						},
 					}
 				})
 

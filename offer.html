@@ -31,7 +31,7 @@
 						<option value="0">购买币种</option>
 						<option :value="item.code+','+item.issuer" v-for="item in iaccount">{{item.code}}</option>
 					</select>
-					<span class="mui-icon"></span>
+					<span class="mui-icon" @tap="changebuyandsell"></span>
 					<select id="sellasset" class="buyasset" v-model="selectsellstring" @change="isuser = true">
 						<option value="0">支付币种</option>
 						<option :value="item.code+','+item.issuer" v-for="item in iaccount">{{item.code}}</option>
@@ -47,17 +47,17 @@
 
 						<div class="userinupt">
 							<h5>价格</h5>
-							<div class="mui-numbox" data-numbox-step='0.01'>
-								<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+							<div class="mui-numbox">
+								<button class="mui-btn mui-btn-numbox-minus" type="button" @tap="inputprice>0.0001?inputprice=sub(parseFloat(inputprice),0.0001):''">-</button>
 								<input class="mui-input-numbox" type="number" id="inputprice" v-model="inputprice" />
-								<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+								<button class="mui-btn mui-btn-numbox-plus" type="button" @tap="inputprice=add(parseFloat(inputprice),0.0001)">+</button>
 							</div>
 
 							<h5>数量</h5>
-							<div class="mui-numbox" data-numbox-step='0.01'>
-								<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+							<div class="mui-numbox">
+								<button class="mui-btn mui-btn-numbox-minus" type="button" @tap="inputnumber>1?inputnumber=sub(parseFloat(inputnumber),1):''">-</button>
 								<input class="mui-input-numbox" type="number" id="inputnumber" v-model="inputnumber" />
-								<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
+								<button class="mui-btn mui-btn-numbox-plus" type="button" @tap="inputnumber=add(parseFloat(inputnumber),1)">+</button>
 							</div>
 
 							<label v-if="isbuy">可用 {{formatenum(sellbalance,2)}} {{selectsell.code}}</label>
@@ -83,7 +83,7 @@
 							</ul>
 							<hr />
 							<ul class="greenprice">
-								<li v-for="(item,index) in pricelist.bids" v-if='index<=5'><span>{{formatenum(item.price,4)}}</span><span>{{formatenum(item.amount,2)}}</span></li>
+								<li v-for="(item,index) in pricelist.bids" v-if='index<=5'><span>{{formatenum(item.price,4)}}</span><span>{{formatenum((item.amount/item.price),2)}}</span></li>
 							</ul>
 						</div>
 						<div class="subwaiting"><span><img src="images/waiting2.gif" alt="正在载入" /></span></div>
@@ -153,10 +153,10 @@
 						selectsell: "", //* @param {Asset}
 						isbuy: true,
 						pricelist: [],
-						inputprice: '', //输入的价格
-						inputnumber: '', //输入的数量
-						buybalance: '', //可买余额
-						sellbalance: '', //可卖余额
+						inputprice: 0, //输入的价格
+						inputnumber: 0, //输入的数量
+						buybalance: 0, //可买余额
+						sellbalance: 0, //可卖余额
 						offerlist: [],
 						isuser : false//是否是用户行为
 					},
@@ -229,7 +229,7 @@
 						getaverage: function(iscover) {
 							var upnum = this.pricelist.bids[0];
 							var downnum = this.pricelist.asks[0];
-							if(this.isuser || this.inputprice == 0 || this.inputprice == '') {
+							if(!!upnum && !!downnum && (this.isuser || this.inputprice == 0 || this.inputprice == '')) {
 								this.inputprice = (parseFloat(upnum.price) / 2 + parseFloat(downnum.price) / 2).toFixed(4);
 								this.isuser = false;
 								//console.log(this.inputprice);
@@ -241,6 +241,7 @@
 								$.get($.apiaddress + "/accounts/" + $.getsourcePublicKey() + "/offers?order=desc")
 									.then(function(offers) {
 										ts.offerlist = offers._embedded.records;
+										//console.log(JSON.stringify(offers));
 									})
 									.catch(function(e) {
 										console.error(e);
@@ -270,6 +271,18 @@
 								}
 							});
 							return _data;
+						},
+						changebuyandsell: function(){//对调买和卖
+							this.isuser = true;
+							var _mid = this.selectbuystring;
+							this.selectbuystring = this.selectsellstring;
+							this.selectsellstring = _mid;					
+						},
+						add: function(a,b){
+							return accAdd(a,b);
+						},
+						sub: function(a,b){
+							return accSub(a,b);
 						}
 					},
 					computed: {
