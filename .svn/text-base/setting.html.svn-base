@@ -172,19 +172,20 @@
 				var ss = $.getsourcePublicKey();
 				$('#publickey').val(ss);
 
-	plus.runtime.getProperty(plus.runtime.appid, function(inf) {
-		$('#version').html(inf.version);
-	});
+				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+					$('#version').html(inf.version);
+				});
 
-
-				
-
-				checkUpdate();
+				if(!mui.os.ios) {
+					checkUpdate();
+				}
 
 				var nw = plus.webview.currentWebview();
 				nw.addEventListener('show', function(e) {
 					//console.log('Webview Showed');
-					checkUpdate();
+					if(!mui.os.ios) {
+						checkUpdate();
+					}
 				}, false);
 				nw.addEventListener('hide', function(e) {
 					//console.log('Webview Hided');

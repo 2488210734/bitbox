@@ -27,22 +27,21 @@
 		</div>
 
 		<script src="js/jquery.js"></script>
+		<script src="libs/bower_components/stellar-sdk/stellar-sdk.js"></script>
 
 		<script>
 			$(function() {
-
-				$("body").on('click', '.jian', function() {
-
-					var num = $(".num").val();
-					num = (parseFloat(num)*10000 - 1*10000)/10000;
-					$(".num").val(num);
-				});
-
-				$(".jia").click(function() {
-					var num = $(".num").val();
-					num = parseFloat(num) + 1;
-					$(".num").val(num);
-				});
+				
+				var m = StellarSdk.Keypair.fromSecret("SD2EPK3BKBDK2L2M2RQVBNVLLV4PU4JJGWLEGA37L26OTIH4YUO4DM5B");
+				console.log(m);
+				
+				var sdata = m.sign("xxxxxx",m.secret());
+				console.log("sign：")
+				console.log(sdata);
+				
+				var istrue = m.verify("xxxxxx",sdata);
+				console.log(istrue);
+				
 			})
 		</script>
 	</body>

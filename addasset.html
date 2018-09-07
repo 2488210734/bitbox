@@ -256,7 +256,7 @@
 							$.iaccount.getaccount().then(function(account) {
 
 								var asset = new StellarSdk.Asset(item.code, item.issuer);
-								var ilimit = (ks == '1') ? '1000000' : '0';
+								var ilimit = (ks == '1') ? '100000000' : '0';
 
 								var _obj_change = {
 									asset: asset,
@@ -345,12 +345,13 @@
 
 			mui.init({
 				beforeback: function() {　　　　 //获得父页面的webview  
-					/*if(!!plus){
-					var list = plus.webview.currentWebview().opener();//触发父页面的自定义事件(refresh),从而进行刷新  
-					mui.fire(list, 'refresh');
+					if(!!plus){
+					var list = plus.webview.getWebviewById('price.html');
+					//console.log(JSON.stringify(list));
+					mui.fire(list, 'getdata');					
 					//返回true,继续页面关闭逻辑  
 					return true;
-					}*/
+					}
 				}
 			});
 		</script>

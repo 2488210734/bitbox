@@ -380,17 +380,10 @@
 							ipath.push(ccc);
 						}
 					}
-					sendmax = (parseFloat(vm.selectedpayment.source_amount) * 1.05).toFixed(7).toString();
+					sendmax = (parseFloat(vm.selectedpayment.source_amount) * 1.06).toFixed(7).toString();
 					//console.log(sendmax);
 
-					var op = StellarSdk.Operation.pathPayment({
-						sendAsset: sendasset, //出售的货币
-						sendMax: sendmax, //出售的最大数量
-						destination: $.getsourcePublicKey(), //自已公钥
-						destAsset: destasset, //购买的货币
-						destAmount: vm.selectedpayment.destination_amount, //购买数量
-						path: ipath //路径									
-					});
+					
 					//console.log(JSON.stringify(sendasset));
 					
 					StellarSdk.Network.usePublicNetwork();
@@ -406,6 +399,16 @@
 						})
 
 					function donext(iaccount) {
+						
+						var op = StellarSdk.Operation.pathPayment({
+						sendAsset: sendasset, //出售的货币
+						sendMax: sendmax, //出售的最大数量
+						destination: $.getsourcePublicKey(), //自已公钥
+						destAsset: destasset, //购买的货币
+						destAmount: vm.selectedpayment.destination_amount, //购买数量
+						path: ipath //路径									
+					});
+						
 						var tx = new StellarSdk.TransactionBuilder(iaccount).addOperation(op).build();
 
 						secretonekey = $.getsecretonekey();
@@ -420,8 +423,10 @@
 								});
 							})
 							.catch(function(e) {
-
+								
 								console.error(e);
+								//console.log(JSON.stringify(tx));
+								//console.log(JSON.stringify(ipath));
 								$("body").removeClass("lock");
 								mui.alert('兑换失败，请稍后重试', '出错啦~~', function() {
 

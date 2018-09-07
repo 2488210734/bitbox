@@ -254,6 +254,7 @@
 						},
 						translatetime: function(creattime) {
 							if(!creattime || creattime == "-") return creattime;
+							creattime=creattime.replace(/-/g,"/");
 							var t = new Date(creattime).getTime();
 							var targetDate = new Date(t);
 							return targetDate.Format("yyyy-MM-dd hh:mm:ss");

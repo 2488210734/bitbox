@@ -1,18 +1,53 @@
-{
-	"name": "BadResponseError",
-	"message": "Transaction submission failed. Server responded: 400 Bad Request",
-	"data": {
-		"type": "https://stellar.org/horizon-errors/transaction_failed",
-		"title": "Transaction Failed",
-		"status": 400,
-		"detail": "The transaction failed when submitted to the stellar network. The `extras.result_codes` field on this response contains further details.  Descriptions of each code can be found at: https://www.stellar.org/developers/learn/concepts/list-of-operations.html",
-		"extras": {
-			"envelope_xdr": "AAAAAGcq5+EnKaWc5TBq6YoD1OIbcZraGZnWOMyUYMBitIFBAAAAZAEXLfsAAAAbAAAAAAAAAAAAAAABAAAAAAAAAAYAAAABU0RBAAAAAABddtjBD+RttqgH3a6z6URleHFKps2ARSQrIXlHYHl2qAAACRhOcqAAAAAAAAAAAAFitIFBAAAAQNstljnwVVyUtfoZtgj+ScptPa66BBDTONlyAsW3BtTI3Z8rg+X3kyTOHpyubDD4/SUdNA6YLvDV46Z3cajTOQA=",
-			"result_codes": {
-				"transaction": "tx_failed",
-				"operations": ["op_low_reserve"]
-			},
-			"result_xdr": "AAAAAAAAAGT/////AAAAAQAAAAAAAAAG/////AAAAAA="
-		}
-	}
-}
+[{
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "725417931",
+	"__callbacks__": {},
+	"__callback_id__": "plus41529723300069",
+	"id": "HBuilder"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow71529719943110",
+	"__callbacks__": {},
+	"__callback_id__": "plus61529723301887",
+	"id": "main.html"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow51529719943582",
+	"__callbacks__": {},
+	"__callback_id__": "plus81529723301887",
+	"id": "buy.html"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow71529719943583",
+	"__callbacks__": {},
+	"__callback_id__": "plus101529723301888",
+	"id": "accountlist.html"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow91529719943584",
+	"__callbacks__": {},
+	"__callback_id__": "plus121529723301888",
+	"id": "setting.html"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow31529719943581",
+	"__callbacks__": {},
+	"__callback_id__": "plus141529723301889",
+	"id": "price.html"
+}, {
+	"__view_array__": [],
+	"__IDENTITY__": "NWindow",
+	"__uuid__": "NWindow201529723282230",
+	"__callbacks__": {
+		"back": [null],
+		"menu": [null]
+	},
+	"__callback_id__": "plus21529723300040",
+	"id": "addasset.html"
+}] at addasset.html: 351

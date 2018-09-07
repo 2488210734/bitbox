@@ -64,7 +64,7 @@
 							<label v-if="isbuy">可买 {{buyable}} {{selectbuy.code}}</label>
 
 							<label v-if="!isbuy">可用 {{formatenum(buybalance,2)}} {{selectbuy.code}}</label>
-							<label v-if="!isbuy">可卖 {{!!sellable ? sellable : 0}} {{selectsell.code}}</label>
+							<label v-if="!isbuy">可得 {{!!sellable ? sellable : 0}} {{selectsell.code}}</label>
 
 							<button type="button" class="mui-btn" :class="isbuy ? 'btngreen' : 'btnred'" id="offerbtn">
 								<span v-if="isbuy">买入 {{selectbuy.code}}</span>
@@ -295,7 +295,7 @@
 						},
 						sellable: function() {
 							if(this.buybalance && this.inputprice) {
-								return this.formatenum(this.buybalance / this.inputprice, 2);
+								return this.formatenum(this.buybalance * this.inputprice, 2);
 							} else {
 								return '--';
 							}
@@ -383,6 +383,7 @@
 						})
 
 					function donext(iaccount) {
+						debugger;
 						var tx = new StellarSdk.TransactionBuilder(iaccount).addOperation(op).build();
 
 						var secretonekey = $.getsecretonekey();
@@ -429,9 +430,11 @@
 							.then(function(account) {
 
 								var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-
 								var secretonekey = $.getsecretonekey();
 								//console.log(JSON.stringify(StellarSdk.Keypair.fromSecret(secretonekey)));
+								debugger;
+								
+								
 								tx.sign(StellarSdk.Keypair.fromSecret(secretonekey));
 								
 								server.submitTransaction(tx)

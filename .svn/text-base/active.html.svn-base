@@ -85,12 +85,10 @@
 				
 				var toAccountList = function() { //设置激活后的跳转方法
 					mui.openWindow({
-						url: 'accountlist.html',
-						id: 'accountlist'
+						url: 'main.html',
+						id: 'main'
 					});
-				}
-				
-												
+				}																
 
 			});
 			

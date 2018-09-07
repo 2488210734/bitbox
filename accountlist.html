@@ -14,8 +14,7 @@
 			}
 			/*			.first-card {
 				margin-top: 55px;
-			}*/
-			
+			}*/		
 			.first-card{
 				background: #007aff; color: #fff;
 			}
@@ -285,12 +284,13 @@
 					methods: {
 						getdata: function(numfirst) {
 							//if($.timecheck()) return true;//加入时间间隔防止webview show有时会重复触发多次
-							//console.log("尝试获取数据...");
+							console.log("尝试获取数据...");
 							
 							var ts = this;
-							$.when($.iaccount.getbalance()).then(function(balancelist) {
+							$.iaccount.getbalance().then(function(balancelist) {
 									$("body").removeClass("lock");
 									//if(numfirst)console.log(JSON.stringify(balancelist));
+									
 									var _arr = [];
 									$.each(balancelist, function(index, value) {
 										var _obj = value;

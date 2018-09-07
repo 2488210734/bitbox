@@ -80,9 +80,7 @@
 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
-
 				$.checkuser();
-
 				//console.log(JSON.stringify($.getItem("alldata")));
 				//setTimeout($.iaccount.pricelist.setall,50);//迟0.05秒再ajax	
 				/*$.when($.iaccount.getpricelist())
@@ -198,6 +196,7 @@
 					return false;
 				};
 			}(mui, document));
+			
 		</script>
 	</body>
 

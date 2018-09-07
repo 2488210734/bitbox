@@ -24,7 +24,8 @@
       "js/sjcl.js",
       "js/hx.js",
       "js/vue.js",
-      "images/waiting2.gif"
+      "images/waiting2.gif",
+      "/assets/unknown/unknown.png"
     ]
   },
   "setting.html": {
@@ -206,7 +207,8 @@
       "js/mui.enterfocus.js",
       "js/vue.js",
       "js/hx.js",
-      "images/waiting2.gif"
+      "images/waiting2.gif",
+      "/assets/unknown/unknown.png"
     ]
   },
   "lock.html": {
@@ -327,7 +329,9 @@
       "lock.html",
       "price.html",
       "setting.html",
-      "buy.html"
+      "buy.html",
+      "addasset.html",
+      "offer.html"
     ]
   },
   "offer.html": {

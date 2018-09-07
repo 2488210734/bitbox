@@ -1,8 +1,6 @@
 (function($) {
 	$.apiaddress = "https://horizon.stellar.org";
-	//$.sourceSecretKey = 'SD2EPK3BKBDK2L2M2RQVBNVLLV4PU4JJGWLEGA37L26OTIH4YUO4DM5B'; //这里先用于测试
-	//$.sourceSecretKey = "";
-	//$.setItem("showlock","1");
+	$.server_address = "https://bitbox.one:5555/app/";
 	$.requesttime = new Date().getTime() - 5000; //当前时间，用于计算请求间隔
 
 	mui.plusReady(function() {
@@ -26,6 +24,15 @@
 			getobjItem: function(key) {
 				return JSON.parse($.getItem(key));
 			}
+		}
+
+		$.getnow = function() { //当前时间十位时间戳
+			return Math.round(new Date().getTime() / 1000).toString();
+		}
+
+		$.signbykey = function(str) {
+			var kp = StellarSdk.Keypair.fromSecret($.getsecretonekey());
+			return encodeURIComponent(kp.sign(str).toString("base64"));
 		}
 
 		$.login = function(secretonekey) { //使用私钥登录
@@ -152,7 +159,8 @@
 			server: new StellarSdk.Server($.apiaddress),
 			sourcePublicKey: $.getsourcePublicKey(),
 			targerAsset: new StellarSdk.Asset("BCNY", "GBCNYBHAAPDSU3UIHXXQTHYZVSBJBI4YUNWXMKJBCPDHTVYR75G6NFHD"),
-			xrppath: {//定义XRP货币的转换路径
+			sdaAsset: new StellarSdk.Asset("SDA", "GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S"),
+			xrppath: { //定义XRP货币的转换路径
 				'from': new StellarSdk.Asset('XRP', 'GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S'),
 				'path': [
 					new StellarSdk.Asset('USDT', 'GBOXNWGBB7SG3NVIA7O25M7JIRSXQ4KKU3GYARJEFMQXSR3APF3KRI6S'),
@@ -206,22 +214,23 @@
 						}
 						/*}else if(value.asset_code==bcny.code, value.asset_issuer==bcny.issuer){
 							
-						}*/ else {
+						}*/
+						else {
 
 							defer = defer.then(function() {
-
+								//debugger;
 								var ddd = $.Deferred();
 								$.iaccount.getimgbyasset(value.asset_code, value.asset_issuer)
 									.catch(function(e) {
 										console.error(JSON.stringify(e));
 									})
 									.then(function(img_obj) {
-										//console.log("获取资产中");
+										//console.log("获取资产中"+value.asset_code);
 
 										obj_price.balance = value.balance;
 										obj_price.code = value.asset_code;
 										obj_price.issuer = value.asset_issuer;
-										obj_price.website = img_obj.website;
+										if(!!img_obj) obj_price.website = img_obj.website;
 										obj_price.image = img_obj.image;
 										//obj_price.price = 0;
 										//console.log(JSON.stringify(value.asset_code));
@@ -242,7 +251,7 @@
 
 				return dtd.promise();
 			},
-			getbuyandsell: function(selfasset, asset){ //获取买价和卖价，asset为目标货币，为空则为XLM
+			getbuyandsell: function(selfasset, asset) { //获取买价和卖价，asset为目标货币，为空则为XLM
 				var dtd = $.Deferred();
 				var targetasset = !!asset ? asset : new StellarSdk.Asset.native();
 				this.server.orderbook(targetasset, selfasset)
@@ -251,59 +260,78 @@
 						console.log(JSON.stringify(e));
 					})
 					.then(function(resp) {
-						
+
 						var _obj = {};
-						if(resp.asks.length != 0 && resp.bids.length != 0) {//买价和卖价同时存在
+
+						_obj.bids = (resp.bids.length > 0) ? parseFloat(resp.bids[0].price).toFixed(7) : 0;
+						_obj.asks = (resp.asks.length > 0) ? parseFloat(resp.asks[0].price).toFixed(7) : 0;
+
+						/*if(resp.asks.length != 0 && resp.bids.length != 0) {//买价和卖价同时存在
 						
 							_obj.bids = parseFloat(resp.bids[0].price).toFixed(7);
 							_obj.asks = parseFloat(resp.asks[0].price).toFixed(7);
-						}
+						}*/
 						dtd.resolve(_obj);
 					});
 				return dtd.promise();
 			},
 			getprice: function(selfasset, asset) { //asset为目标货币，为空则为XLM						
 				var dtd = $.Deferred();
-				this.getbuyandsell(selfasset, asset).then(function(rex){
+				this.getbuyandsell(selfasset, asset).then(function(rex) {
 					var aveprice = 0;
-					if(JSON.stringify(rex)!="{}"){
-						aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
+					if(JSON.stringify(rex) != "{}") {
+						if(!!rex.bids && !!rex.asks && parseFloat(rex.bids) > 0 && parseFloat(rex.asks) > 0) {
+							aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
+						} else if(!!rex.bids && parseFloat(rex.bids) > 0) {
+							aveprice = parseFloat(rex.bids).toFixed(7);
+						} else if(!!rex.asks && parseFloat(rex.asks) > 0) {
+							aveprice = parseFloat(rex.asks).toFixed(7);
+						}
+
 					}
+
 					dtd.resolve(aveprice);
 				});
 				return dtd.promise();
 			},
-			getpriceTarget: function(selfasset){//以某种货币为基准计算价格，这里以bcny为基准
+			getpriceTarget: function(selfasset) { //以某种货币为基准计算价格，这里以bcny为基准
 				var dtd = $.Deferred();
-				var targerAsset = this.targerAsset;		
+				var targerAsset = this.targerAsset;
 				var ts = this;
-				if(selfasset.code==this.targerAsset.code && selfasset.issuer==this.targerAsset.issuer){
-					dtd.resolve("1.0000000");//基准货币bcny的价格定为1
-				}else if(selfasset.code==this.xrppath.from.code && selfasset.issuer==this.xrppath.from.issuer){
-					//XRP货币使用特殊路径计算价格
-					var ts = this;
-					var path1 = this.getprice(selfasset,ts.xrppath.path[0]);
-					var path2 = this.getprice(ts.xrppath.path[0],ts.xrppath.path[1]);
-					var path3 = this.getprice(ts.xrppath.path[1],ts.xrppath.path[2]);
-					$.when(path1,path2,path3).then(function(a,b,c){
-						dtd.resolve((parseFloat(a)*parseFloat(b)*parseFloat(c)).toFixed(7));
+				if(selfasset.code == this.targerAsset.code && selfasset.issuer == this.targerAsset.issuer) {
+					dtd.resolve("1.0000000"); //基准货币bcny的价格定为1
+				} else if(selfasset.code == ts.sdaAsset.code && selfasset.issuer == ts.sdaAsset.issuer) {
+					//SDA货币直接计算价格
+					ts.getprice(selfasset, targerAsset).then(function(rs) {
+						dtd.resolve(rs);
 					})
-				}
-				else{
-				this.getbuyandsell(selfasset, targerAsset).then(function(rex){
-					//买卖价格相差小于10%直接兑换
-					if(JSON.stringify(rex)!="{}" && parseFloat(rex.asks)/parseFloat(rex.bids) < 1.10){
-						var aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
-						dtd.resolve(aveprice);
-					}else{
-						$.when(ts.getprice(selfasset),ts.getprice(new StellarSdk.Asset.native(),targerAsset))
-						.then(function(a,b){
-							var aveprice = (parseFloat(a)*parseFloat(b)).toFixed(7);
+
+				} else if(selfasset.code == this.xrppath.from.code && selfasset.issuer == this.xrppath.from.issuer) {
+					//XRP货币使用特殊路径计算价格
+
+					var ts = this;
+					var path1 = this.getprice(selfasset, ts.xrppath.path[0]);
+					var path2 = this.getprice(ts.xrppath.path[0], ts.xrppath.path[1]);
+					var path3 = this.getprice(ts.xrppath.path[1], ts.xrppath.path[2]);
+					$.when(path1, path2, path3).then(function(a, b, c) {
+						//console.log(a,b,c);
+						dtd.resolve((parseFloat(a) * parseFloat(b) * parseFloat(c)).toFixed(7));
+					})
+				} else {
+					this.getbuyandsell(selfasset, targerAsset).then(function(rex) {
+						//买卖价格相差小于10%直接兑换
+						if(JSON.stringify(rex) != "{}" && parseFloat(rex.asks) / parseFloat(rex.bids) < 1.10) {
+							var aveprice = (parseFloat(rex.bids) / 2 + parseFloat(rex.asks) / 2).toFixed(7);
 							dtd.resolve(aveprice);
-						})
-					}
-					
-				});
+						} else {
+							$.when(ts.getprice(selfasset), ts.getprice(new StellarSdk.Asset.native(), targerAsset))
+								.then(function(a, b) {
+									var aveprice = (parseFloat(a) * parseFloat(b)).toFixed(7);
+									dtd.resolve(aveprice);
+								})
+						}
+
+					});
 				}
 				return dtd.promise();
 			},
@@ -348,108 +376,10 @@
 						dtd.resolve((parseFloat(rexp2) * parseFloat(rexp)).toFixed(7));
 					})
 				}).catch(function(e) {
-					console.log(JSON.stringify(e));
+					//console.log(JSON.stringify(e));
 				});
 				return dtd.promise();
 			},
-			//			pricelist: {//以前的方法，已不用
-			//				get: function(callback) { //请求返回价格，需请求多次
-			//					var server = new StellarSdk.Server($.apiaddress);
-			//					var sourcePublicKey = $.getsourcePublicKey();
-			//
-			//					server.loadAccount(sourcePublicKey) //请求返回资产
-			//						.catch(function(e) {
-			//							//console.log(JSON.stringify(e));
-			//							console.error(e);
-			//						})
-			//						.then(function(account) {
-			//							if(!account) {
-			//								return false;
-			//							}
-			//
-			//							obj_get = {};
-			//							obj_get.data = [];
-			//							//console.log(account);
-			//
-			//							var balances_arr = account.balances;
-			//							var k = 1;
-			//
-			//							$.each(balances_arr, function(index, value) { //循环请求，返回每一项
-			//								k++;
-			//								var obj_price = {};
-			//								if(value.asset_type == "native") { //XCN								
-			//									obj_price.code = "XLM";
-			//									obj_price.balance = value.balance;
-			//									obj_price.website = "Stellar Network";
-			//									obj_price.price = "1.0000000";
-			//									obj_price.issuer = "";
-			//									obj_price.image = "assets/XLM/XLM.png";
-			//									obj_price.type = "native";
-			//									obj_get.data.push(obj_price);
-			//								} else {
-			//
-			//									var dtd = $.Deferred();
-			//
-			//									$.when()
-			//										.then(function() {
-			//											var sss = $.iaccount.getimgbyasset(value.asset_code, value.asset_issuer);
-			//											if(sss) return sss;
-			//										})
-			//										.then(function(img_obj) {
-			//											obj_price.balance = value.balance;
-			//											obj_price.code = value.asset_code;
-			//											obj_price.issuer = value.asset_issuer;
-			//											obj_price.website = img_obj.website;
-			//											obj_price.image = img_obj.image;
-			//
-			//											obj_get.data.push(obj_price);
-			//
-			//											if(k >= balances_arr.length) {
-			//
-			//												//console.log(obj_get);
-			//												//全部返回了再进行排序
-			//												obj_get.data = obj_get.data.sort(compare('code')); //先按首字母排序
-			//
-			//												$.each(obj_get.data, function(index, value) {
-			//													if(value.code == "XLM") {
-			//														var str = obj_get.data.splice(index, 1);
-			//														obj_get.data.unshift(str[0]); //删除再在开头插入native
-			//														return false;
-			//													}
-			//												});
-			//												//obj_get.account = account;
-			//												//console.log(JSON.stringify(obj_get));
-			//												callback(obj_get, account);
-			//
-			//											}
-			//
-			//										})
-			//
-			//								}
-			//
-			//							});
-			//
-			//						});
-			//				},
-			//				isactive: true,
-			//				setall: function() {
-			//					if($.iaccount.pricelist.isactive) {
-			//						$.iaccount.pricelist.get(function(_obj) {
-			//							$.objItem.setobjItem("alldata", _obj);
-			//							//console.log("正在获取数据...");
-			//							setTimeout($.iaccount.pricelist.setall, 8000);
-			//						});
-			//
-			//					} else {
-			//						setTimeout($.iaccount.pricelist.setall, 8000);
-			//					}
-			//
-			//				},
-			//				getall: function() {
-			//					return $.objItem.getobjItem("alldata") || {};
-			//				}
-			//
-			//			},
 			getbalancebyasset: function(asset, accountlist) { //通过asset取得资产方法
 				var _balance = 0;
 				$.each(accountlist, function(index, value) {
@@ -463,6 +393,7 @@
 			getimgbyasset: function(code, issuer, type) {
 				var _source = gateways.getSourceById(issuer); //从gateways.js获取图标和域名信息
 				var dtd = $.Deferred();
+				
 
 				var img_obj = {};
 				if(type == 'native') {
@@ -472,15 +403,14 @@
 					$.each(_source.assets, function(index, value) {
 						if(index == code && !!value.image) {
 							img_obj.image = value.image;
-							img_obj.website = _source.name.replace("https://", "");
+							if(_source.name) img_obj.website = _source.name.replace("https://", "");
 						}
 					});
 				}
 
-				//console.log(JSON.stringify(img_obj));
+				//console.log(JSON.stringify(objitem));
 				//如果货币在gateways找不到
 				if(!img_obj.image) {
-
 					var objitem = $.objItem.getobjItem(code + "," + issuer);
 
 					if(objitem != null && JSON.stringify(objitem) != "{}") {
@@ -489,8 +419,14 @@
 						img_obj.website = objitem.website.replace("https://", "");
 						dtd.resolve(img_obj);
 					} else {
-						//console.log("从网络");
-
+						console.log("从网络");
+						console.log(code);
+						
+						/*if(!objitem || !objitem.website){//没有网址就返回unkonw
+							dtd.resolve({image:"assets/unknow/nunknown.png",website:"unknow"});
+						}*/	
+						//dtd.resolve({image:"assets/unknow/nunknown.png",website:"unknow"});
+						//return dtd.promise();						
 						$.iaccount.getimgfromnetwork(code, issuer)
 							.then(function(_data) {
 								$.objItem.setobjItem(code + "," + issuer, _data);
@@ -501,6 +437,7 @@
 							}).catch(function(e) {
 								console.log(code);
 								console.error(e);
+								dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
 							});
 					}
 
@@ -510,20 +447,27 @@
 				return dtd.promise();
 			},
 			getimgfromnetwork: function(code, issuer) {
-
 				var dtd = $.Deferred();
 				$.get($.apiaddress + "/assets?asset_code=" + code + "&asset_issuer=" + issuer)
 					.then(function(rs) {
 						return rs._embedded.records[0]._links.toml.href;
 					})
 					.then(function(tomlurl) {
+						//console.log(JSON.stringify(tomlurl));
+						if(!tomlurl || tomlurl == "") { //没有网站地址直接返回unknow!							
+							dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
+							return false;
+						}
 						$.get(tomlurl)
 							.then(function(rs) {
+								//console.log(JSON.stringify(rs));
 								var tomlrs;
 								try {
 									tomlrs = toml.parse(rs);
 								} catch(e) {
-
+									console.log(JSON.stringify(e));
+									dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
+									return false;
 								}
 
 								if(tomlrs) {
@@ -537,12 +481,15 @@
 									//console.log(JSON.stringify(_obj));
 									dtd.resolve(_obj);
 								}
-							})
+								dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
+							}).catch(function(e) {
+								console.error(JSON.stringify(e));
+								dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
+							});
 					})
 					.catch(function(e) {
-						console.log(code);
-						console.log(issuer);
-						console.error(JSON.stringify(e));
+						//console.error(JSON.stringify(e));
+						dtd.resolve({ image: "assets/unknown/unknown.png", website: "unknow" });
 					});
 
 				return dtd.promise();

@@ -20,8 +20,7 @@
 				background: #fff;
 				margin: 0;
 				position: relative;
-			}
-			
+			}			
 			h3.th span:nth-child(1):before {
 				content: "";
 				display: block;
@@ -129,6 +128,23 @@
 						<div class="price">{{formatenum(1/parseFloat(item.price),7)}}</div>
 					</li>
 				</ul>
+				<ul class="mui-table-view" id="bitboxlist">
+					<li class="mui-table-view-cell" v-for="(item,index) in bitboxdata">
+						<div class="zc">
+							<img class="mui-media-object mui-pull-left" :src="item.image">
+							<div class="mui-media-body">
+								<span class="code">{{item.code}}</span> <i class="website">{{item.website}}</i>
+								<p>{{formateissuer(item.issuer)}}</p>
+
+							</div>
+						</div>
+						<div class="price">
+							<div class="mui-switch mui-switch-mini" :data-switch="index" :class="{'mui-active':item.isactive=='1'}" @tap='changestruck(item.code,item.issuer,item,index)'>
+								<div class="mui-switch-handle"></div>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
 
 			<div class="mui-content addasset">
@@ -145,6 +161,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/function.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/sjcl.js"></script>
 		<script src="js/vue.js"></script>
 		<script src="js/hx.js"></script>
 		<script>
@@ -171,11 +188,16 @@
 					clearInterval(timer);
 					console.log('Webview price endInterval');
 				}, false);
+				
+				window.addEventListener('getdata', function(e) {
+					vm.getdata();
+				}, false);
 
 				var vm = new Vue({
 					el: '#app',
 					data: {
 						alldata: {},
+						bitboxdata: [],
 						getindex: 1 //第几次获取数据
 					},
 					created: function() {
@@ -194,6 +216,7 @@
 									$("body").removeClass("lock");
 
 									var _arr = [];
+									var _defaultbalance = $.defaultpricelist.concat();
 									$.each(balancelist, function(index, value) {
 										var _obj = value;
 										if(numfirst == true && !value.price) { //第一次默认为0，后面读取旧数据，再ajax更新数据防止跳动
@@ -206,13 +229,24 @@
 											}
 										}
 										_arr.push(value);
-											$.iaccount.getpriceTarget(new StellarSdk.Asset(value.code, value.issuer)).then(function(x) {
-												//console.log(JSON.stringify(x));
-												ts.$set(ts.alldata[index], 'price', x);
-											});
-
+										$.iaccount.getpriceTarget(new StellarSdk.Asset(value.code, value.issuer)).then(function(x) {
+											//console.log(JSON.stringify(x));
+											//debugger;
+											ts.$set(ts.alldata[index], 'price', x);
+										});
+										
+										//添加筛选默认显示货币
+										
+										for(var j=0;j<_defaultbalance.length;j++){
+											_defaultbalance[j].isactive = "-1";
+											if(_defaultbalance[j].code == value.code && _defaultbalance[j].issuer == value.issuer){
+												_defaultbalance.splice(j--,1);
+											}
+										}
+										
 									});
-
+									ts.bitboxdata = _defaultbalance;
+									//console.log(JSON.stringify(_defaultbalance));
 									ts.alldata = _arr;
 								})
 								.catch(function(e) {
@@ -220,9 +254,62 @@
 									console.log(JSON.stringify(e));
 								})
 						},
-						formateissuer:function(issuer){
-							if(issuer){
-								return issuer.substr(0,5)+'***'+issuer.substr(-4,4);								
+						changestruck: function(code, issuer, item, index) {
+							
+							if(item.balance > 0) return true;
+							if($.timecheck()) return true;
+
+							var ts = this;
+							var ks = ts.bitboxdata[index].isactive == '1' ? "-1" : "1";
+							item.isactive = ks;
+							Vue.set(ts.bitboxdata, index, item);
+							//console.log(JSON.stringify(ts.alldata[index]));
+							
+							$("body").addClass("lock");
+							StellarSdk.Network.usePublicNetwork();
+							$.iaccount.getaccount().then(function(account) {
+
+								var asset = new StellarSdk.Asset(item.code, item.issuer);
+								var ilimit = (ks == '1') ? '100000000' : '0';
+
+								var _obj_change = {
+									asset: asset,
+									limit: ilimit
+								};
+
+								var op = StellarSdk.Operation.changeTrust(_obj_change);
+
+								var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+
+								var secretonekey = $.getsecretonekey();						
+								tx.sign(StellarSdk.Keypair.fromSecret(secretonekey));
+
+								console.log("正在提交...");
+								
+								$.iaccount.server.submitTransaction(tx)
+									.then(function(result) {
+										$("body").removeClass("lock");
+										vm.getdata();
+										mui.toast('更改成功！');
+										//console.log(result);
+									})
+									.catch(function(e) {
+										$("body").removeClass("lock");
+										if(e.data.extras.result_codes.operations[0]=="op_low_reserve"){
+											mui.alert("可能原因：您的余额不足","更改失败");
+										}else{
+											mui.toast('更改失败，请稍后重试！');
+										}
+
+										console.log(JSON.stringify(e));
+										item.isactive = (-parseInt(ks)).toString();
+										Vue.set(ts.alldata, index, item);
+									});
+							});
+						},
+						formateissuer: function(issuer) {
+							if(issuer) {
+								return issuer.substr(0, 5) + '***' + issuer.substr(-4, 4);
 							}
 						},
 						formatenum: function(n, m) {
